@@ -27,6 +27,9 @@ Some basic design parameters for the playbooks and evironment:
 - Where applicable, services must use valid SSL certificates, 
   with available ciphers and certs configured per security
   best practices.
+- Credentials and PII will be kept to a minimum to aid reuse.  Where required,
+  private functionality will be implemented via a `{{ private }}` namespace.
+  This follows the successful paradigm used by Fedora Infrastructure.
 
 Operation
 ---------
