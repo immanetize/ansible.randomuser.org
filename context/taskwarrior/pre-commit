@@ -5,7 +5,7 @@
 
 git status --porcelain --untracked-files=no | awk '{print $2}' | \
   while read file; do
-    if ( echo $file | egrep -q  "(backlog|pending|undo).data"; then
+    if ( echo $file | egrep -q  "(backlog|pending|undo).data" ) ; then
       git add $file
     fi
   done
