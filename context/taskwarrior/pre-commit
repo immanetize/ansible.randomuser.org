@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+# before committing, check for updates to the taskwarrior database and add 
+# them to the commit.  It would be tedious to keep doing it manually, and
+# taskwarrior does it's own state tracking.
+
+git status --porcelain --untracked-files=no | awk '{print $2}' | \
+  while read file; do
+    if ( echo $file | egrep -q  "(backlog|pending|undo).data"; then
+      git add $file
+    fi
+  done
+
+
