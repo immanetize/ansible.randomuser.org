@@ -1,0 +1,5 @@
+---
+rax_networks:
+  DFW_management:
+    cidr: 10.214.5.0/24
+    region: DFW

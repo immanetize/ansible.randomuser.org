@@ -1,2 +1,4 @@
 *.swp
 private/*
+./*/private/*
+context/log/

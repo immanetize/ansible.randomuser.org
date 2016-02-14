@@ -1,2 +1,3 @@
 [description:"look into what ansible callbacks do, and how they are useful." entry:"1455331281" modified:"1455331281" project:"callback" status:"pending" uuid:"f3d4a406-b66b-4d2e-a3d2-e3a70e941226"]
 [description:"look into accelerated mode and pipelining." entry:"1455332858" modified:"1455332858" project:"ansible" status:"pending" uuid:"1db84cd5-ba80-4b16-bab2-29bed0beece7"]
+[description:"create cloud networks from hostvars instead of separate task" entry:"1455403213" modified:"1455403213" project:"ansible" status:"pending" uuid:"1992b8a6-ea2d-458a-8a82-af2a4077416e"]

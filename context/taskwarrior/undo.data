@@ -4,3 +4,6 @@ new [description:"look into what ansible callbacks do, and how they are useful."
 time 1455332858
 new [description:"look into accelerated mode and pipelining." entry:"1455332858" modified:"1455332858" project:"ansible" status:"pending" uuid:"1db84cd5-ba80-4b16-bab2-29bed0beece7"]
 ---
+time 1455403213
+new [description:"create cloud networks from hostvars instead of separate task" entry:"1455403213" modified:"1455403213" project:"ansible" status:"pending" uuid:"1992b8a6-ea2d-458a-8a82-af2a4077416e"]
+---

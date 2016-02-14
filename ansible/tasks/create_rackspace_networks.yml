@@ -1,0 +1,8 @@
+---
+- name: create cloud networks
+  rax_network:
+    label="{{ item.key }}"
+    region="{{ item.value.region }}"
+    cidr="{{ item.value.cidr }}"
+    creds_file="{{ rax_creds_file }}"
+  with_dict: rax_networks

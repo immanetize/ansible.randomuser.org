@@ -1,0 +1,9 @@
+---
+basedir:  ~/ansible.randomuser.org/ansible
+private:  ~/ansible.randomuser.org/ansible/private
+files:    ~/ansible.randomuser.org/ansible/files
+roles:    ~/ansible.randomuser.org/ansible/roles
+handlers: ~/ansible.randomuser.org/ansible/handlers
+tasks:    ~/ansible.randomuser.org/ansible/tasks
+vars_path:  ~/ansible.randomuser.org/ansible/vars
+rax_creds_file: ~/.rack_personal
