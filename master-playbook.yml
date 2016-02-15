@@ -8,7 +8,10 @@
     - ~/ansible.randomuser.org/ansible/vars/cloud_networks.yml 
   vars:
     - create_group: cloud_hosts
-  
+    - domains:
+      - randomuser.org
+
   tasks:
-    - include: "{{ tasks }}/create_rackspace_networks.yml"
-    - include: "{{ tasks }}/create_rackspace_instance.yml" 
+    - include: "{{ tasks }}/rax/create_rackspace_domain.yml"
+    - include: "{{ tasks }}/rax/create_rackspace_networks.yml"
+    - include: "{{ tasks }}/rax/create_rackspace_instance.yml" 
