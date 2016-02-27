@@ -6,4 +6,6 @@ packages:
 - powerline-vim
 - tmux-powerline
 - powerline-docs
-
+- openssh-askpass
+- virt-manager
+- libvirt
