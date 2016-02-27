@@ -1,0 +1,9 @@
+---
+packages:
+- vim-enhanced
+- tmux
+- powerline
+- powerline-vim
+- tmux-powerline
+- powerline-docs
+
