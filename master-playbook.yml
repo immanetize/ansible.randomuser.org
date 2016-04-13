@@ -10,6 +10,8 @@
     - create_group: cloud_hosts
     - domains:
       - randomuser.org
+    - exnet: public
+    - servicenet: private
 
   tasks:
     - include: "{{ tasks }}/rax/create_rackspace_domain.yml"

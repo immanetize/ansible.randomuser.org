@@ -10,7 +10,6 @@
     image="{{hostvars[item]['image']}}"
     flavor="{{hostvars[item]['flavor']}}"
     region="{{hostvars[item]['region']}}"
-    networks="public","private","{{hostvars[item]['region']}}_management"
     config_drive=yes
     user_data="{{hostvars[item]['cloud_init_file']}}"
     state=present
@@ -18,13 +17,6 @@
     wait_timeout=300
   with_items: "{{groups[create_group]}}"
   register: rax
-
-- name: debug rax
-  debug: var="{{rax['results'][0].instances|to_nice_json}}"
-
-- name: debug hostvars
-  debug: var="{{item}}"
-  with_dict: "{{hostvars['eos.randomuser.org']}}"
 
 - name: make an A record for the new instance
   rax_dns_record:

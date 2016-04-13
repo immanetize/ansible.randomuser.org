@@ -1,0 +1,8 @@
+---
+# F23
+image: c34cc896-ca7a-4da8-9df9-e2898ded6fea 
+flavor: performance1-2
+cloud_networks:
+  - dfw_management
+cloud_init_file: "{{ files }}/cloud_init_builder"
+region: DFW
