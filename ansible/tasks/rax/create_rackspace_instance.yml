@@ -21,22 +21,22 @@
 - name: make an A record for the new instance
   rax_dns_record:
     creds_file="{{rax_creds_file}}"
-    data="{{item.accessIPv4}}"
-    domain="{{'.'.join(item['name'].split('.')[1:])}}"
-    name="{{item.name}}"
+    data="{{item['instances'][0]['accessIPv4']}}"
+    domain="{{'.'.join(item['instances'][0]['name'].split('.')[1:])}}"
+    name="{{item['instances'][0]['name']}}"
     region=DFW
     state=present
     type=A
-  with_items: "{{rax['results'][0].instances}}"
+  with_items: "{{rax['results']}}"
 
 - name: make an AAAA record for the new instance
   rax_dns_record:
     creds_file="{{rax_creds_file}}"
-    data="{{item.rax_accessipv6}}"
-    domain="{{'.'.join(item['name'].split('.')[1:])}}"
-    name="{{item.name}}"
+    data="{{item['instances'][0]['rax_accessipv6']}}"
+    domain="{{'.'.join(item['instances'][0]['name'].split('.')[1:])}}"
+    name="{{item['instances'][0]['name']}}"
     region=DFW
     state=present
     type=AAAA
-  with_items: "{{rax['results'][0].instances}}"
+  with_items: "{{rax['results']}}"
 
