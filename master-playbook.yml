@@ -32,3 +32,8 @@
     - placeholder: True
   roles:
     - ipsec_endpoint
+
+- name: deploy a mailserver
+  hosts: eos.randomuser.org
+  roles: 
+    - mailserver
