@@ -1,0 +1,5 @@
+volume:
+  name: mail_spool
+  mirrors: 3
+  size: 75
+  type: SATA

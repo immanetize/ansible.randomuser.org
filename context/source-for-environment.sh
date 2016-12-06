@@ -11,3 +11,5 @@ export ANSIBLE_HOSTS=~/ansible.randomuser.org/inventory/ansible_hosts
 export ANSIBLE_CONFIG=~/ansible.randomuser.org/context/ansible.cfg
 
 export TASKRC=~/ansible.randomuser.org/context/taskwarrior/taskrc
+
+alias check="if [[ /tmp/master-playbook.retry ]]; then RETRY_ARG='--limit @/tmp/master-playbook.retry'; else RETRY_ARG=""; fi ; ansible-playbook -C ~/ansible.randomuser.org/master-playbook.yml -vvv $RETRY_ARG"

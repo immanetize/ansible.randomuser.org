@@ -1,8 +1,11 @@
   - name: install ipsec related packages
     dnf:
-      name=libreswan
+      name="{{item}}"
       state=present
     when: ansible_distribution == "Fedora"
+    with_items:
+      - libreswan
+      - python-firewall
 
   - name: install ipsec related packages
     yum:
@@ -11,14 +14,13 @@
     when: ansible_distribution == 'CentOS'
 
   - name: generate host keys
-    command: ipsec initnss --configdir /etc/ipsec.d/
-    #args: creates=/etc/ipsec.d/*.db
+    command: 
+      ipsec initnss --configdir /etc/ipsec.d/ 
+      creates=/etc/ipsec.d/*.db
     ignore_errors: yes
 
   - name: generate host keys
-    command: "ipsec newhostkey --configdir /etc/ipsec.d/ --output /etc/ipsec.d/{{ansible_fqdn}}.secrets"
-    args:
-      creates="/etc/ipsec.d/{{ansible_fqdn}}.secrets"
+    command: "ipsec newhostkey --configdir /etc/ipsec.d/ --output /etc/ipsec.d/{{ansible_fqdn}}.secrets creates=/etc/ipsec.d/{{ansible_fqdn}}.secrets"
 
   - name: make ipsec go
     service:

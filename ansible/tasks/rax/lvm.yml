@@ -1,0 +1,16 @@
+---
+- debug: var=volume
+- name: create cbs volumes
+  delegate_to: localhost
+  rax_cbs:
+    creds_file="{{rax_creds_file}}"
+    volume_type="{{volume.type}}"
+    region=IAD
+    wait=yes
+    size="{{volume.size}}"
+    name="mailspool_lv_{{item}}"
+  with_sequence: "count={{volume.mirrors|int | default(5)}}"
+
+  register: cbs_volumes
+- debug: var=cbs_volumes
+

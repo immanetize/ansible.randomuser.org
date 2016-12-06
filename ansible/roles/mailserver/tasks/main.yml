@@ -1,4 +1,6 @@
 ---
+- include: "{{tasks}}/rax/lvm.yml"
+
 - name: install relevant packages
   dnf:
     name={{item}}

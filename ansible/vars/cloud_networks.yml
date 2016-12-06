@@ -1,5 +1,11 @@
 ---
 rax_networks:
-  DFW_management:
+  - name: DFW_management
     cidr: 10.214.5.0/24
     region: DFW
+  - name: interlan.randomuser.org
+    cidr: 10.27.214.0/24
+    region: DFW
+  - name: interlan.randomuser.org
+    cidr: 10.27.43.0/24
+    region: IAD

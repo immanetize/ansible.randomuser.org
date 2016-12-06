@@ -5,4 +5,4 @@ flavor: general1-2
 cloud_networks:
   - dfw_management
 cloud_init_file: /home/pete/ansible.randomuser.org/ansible/files/proteus
-region: DFW
+region: IAD
