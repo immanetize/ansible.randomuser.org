@@ -15,6 +15,7 @@
 
   tasks:
     - include: "{{ tasks }}/rax/create_rackspace_domain.yml"
+    - debug: var=rax_networks
     - include: "{{ tasks }}/rax/create_rackspace_networks.yml"
     - include: "{{ tasks }}/rax/create_rackspace_instance.yml" 
 
