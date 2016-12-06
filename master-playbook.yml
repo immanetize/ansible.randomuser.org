@@ -12,29 +12,35 @@
       - randomuser.org
     - exnet: public
     - servicenet: private
-
+  handlers:
+    - include: "{{ tasks }}/rax/deploy_shim.yml"
   tasks:
     - include: "{{ tasks }}/rax/create_rackspace_domain.yml"
     - debug: var=rax_networks
     - include: "{{ tasks }}/rax/create_rackspace_networks.yml"
     - include: "{{ tasks }}/rax/create_rackspace_instance.yml" 
 
-- name: make ipsec endpont
-  hosts: 
-    - proteus.randomuser.org
-    - gateway.randomuser.org
-  become: True
-  become_method: sudo
-  gather_facts: True
-  vars_files: 
-    - ~/ansible.randomuser.org/ansible/vars/global.yml
-    - ~/ansible.randomuser.org/ansible/vars/cloud_networks.yml 
-  vars:
-    - placeholder: True
-  roles:
-    - ipsec_endpoint
+#- name: make ipsec endpont
+#  hosts: 
+#    - proteus.randomuser.org
+#    - gateway.randomuser.org
+#  become: True
+#  become_method: sudo
+#  gather_facts: True
+#  vars_files: 
+#    - ~/ansible.randomuser.org/ansible/vars/global.yml
+#    - ~/ansible.randomuser.org/ansible/vars/cloud_networks.yml 
+#  vars:
+#    - placeholder: True
+#  roles:
+#    - ipsec_endpoint
 
 - name: deploy a mailserver
-  hosts: eos.randomuser.org
+  hosts: proteus.randomuser.org
+  vars_files: 
+    - ~/ansible.randomuser.org/ansible/vars/global.yml
+    - ~/ansible.randomuser.org/ansible/vars/mailserver.yml
+  tasks:
+    - debug: var=volume
   roles: 
     - mailserver

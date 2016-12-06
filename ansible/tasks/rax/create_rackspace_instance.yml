@@ -17,7 +17,10 @@
     wait_timeout=300
   with_items: "{{groups[create_group]}}"
   register: rax
-
+  notify: 
+  - update host file
+  - update known hosts
+- debug: var=rax
 - name: make an A record for the new instance
   rax_dns_record:
     creds_file="{{rax_creds_file}}"
@@ -28,7 +31,6 @@
     state=present
     type=A
   with_items: "{{rax['results']}}"
-
 - name: make an AAAA record for the new instance
   rax_dns_record:
     creds_file="{{rax_creds_file}}"
