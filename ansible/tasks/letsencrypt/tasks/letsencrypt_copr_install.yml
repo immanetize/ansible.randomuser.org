@@ -1,0 +1,14 @@
+---
+- name: install dnf copr plugin
+  dnf: 
+    name="dnf-command(copr)"
+    state=present
+  when: >
+    (
+     ansible_distribution == "Fedora" and
+     ansible_distribution_major_version <= 23
+    )
+
+- name: enable letsencrypt copr
+  command: dnf copr enable @letsencrypt/letsencrypt
+  

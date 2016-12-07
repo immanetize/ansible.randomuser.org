@@ -3,3 +3,20 @@ volume:
   mirrors: 3
   size: 75
   type: SATA
+  logical_volumes:
+    - name: postfix
+      share: 40%
+      path: /var/spool/postfix
+tls:
+  protocols: TLSv1.2
+  ciphers: HIGH
+
+certbot_domain:  proteus.randomuser.org
+certbot_agree_tos: True
+certbot_email: me@petetravis.com
+certbot_path_public: /etc/ssl/certs/{{certbot_domain}}.crt
+certbot_path_private: /etc/ssl/certs/private/{{certbot_domain}}.key
+certbot_web_server: httpd
+certbot_owner: valentine
+certbot_group: valentine
+  

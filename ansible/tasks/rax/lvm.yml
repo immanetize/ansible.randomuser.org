@@ -1,5 +1,5 @@
 ---
-- name: install lvm pacages
+- name: install lvm packages
   dnf:
     name=lvm2
     state=present
@@ -40,24 +40,41 @@
   
   with_items: "{{post_attach_block_devices.stdout.split()}}"
 
-- name: get PVs
-  shell: pvs --no-headings | awk '{print $1}'
-  register: pv_list
-
 - name: get available partitions
   shell: echo /dev/xvd[a-z]1
   register: partition_list
+- debug:
+    msg="{% for item in  partition_list.stdout.split() %}{% if item not in ansible_mounts|map(attribute='device') %}{% print item %}{% endif %}{% if not loop.last and not loop.first %}{% print ',' %}{% endif %}{% endfor %}"
 
-- name: pvcreate
-  shell: pvcreate {{item}}
-  with_items: "{{ partition_list.stdout.split() }}"
-  when: "'{{ item }}' not in pv_list.stdout_lines and '{{ item }}' not in starting_block_devices.stdout.split()"
+
 
 - name: create the PVs and vg in one go
   lvg:
-    pvs="{{ set(partition-list.stdout.split()) - set(starting_block_devices.stdout.split() }}"
-    vg={{volume.name}}
-    vg_options=
+    pvs="{% for item in  partition_list.stdout.split() %}{% if item not in ansible_mounts|map(attribute='device') %}{% print item %}{% endif %}{% if not loop.last and not loop.first %}{% print ',' %}{% endif %}{% endfor %}"
+    vg="{{volume.name}}"
+
+- name: create the lvs
+  lvol:
+    lv="{{item.name}}"
+    size="{{item.share}}FREE"
+    vg="{{volume.name}}"
+    opts="--monitor y 
+      --type raid1"
+  with_items: "{{volume.logical_volumes}}"
+
+- name: create filesystems
+  filesystem:
+    dev="/dev/{{volume.name}}/{{item.name}}"
+    fstype="{{item.filesystem|default("ext4")}}"
+  with_items: "{{volume.logical_volumes}}"
+
+- name: create the mount point
+  mount:
+    src="/dev/{{volume.name}}/{{item.name}}"
+    fstype="{{item.filesystem|default("ext4")}}"
+    name="{{item.path}}"
+    state=mounted
+  with_items: "{{volume.logical_volumes}}"
 
 
 
