@@ -5,7 +5,7 @@ volume:
   type: SATA
   logical_volumes:
     - name: postfix
-      share: 40%
+      size: 20G
       path: /var/spool/postfix
 tls:
   protocols: TLSv1.2

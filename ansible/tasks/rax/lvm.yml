@@ -56,7 +56,7 @@
 - name: create the lvs
   lvol:
     lv="{{item.name}}"
-    size="{{item.share}}FREE"
+    size="{{item.size}}"
     vg="{{volume.name}}"
     opts="--monitor y 
       --type raid1"
