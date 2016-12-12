@@ -50,4 +50,4 @@
   roles: 
     - ansible-certbot
     - mailserver
-    - imap
+    - imapd
