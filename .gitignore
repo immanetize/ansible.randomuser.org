@@ -1,5 +1,5 @@
 *.swp
 private/*
 ./*/private/*
-context/log/
+context/log/*
 *retry
