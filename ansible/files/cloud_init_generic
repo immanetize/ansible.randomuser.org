@@ -12,6 +12,7 @@ packages:
   - oddjob
   - oddjob-mkhomedir
   - sssd
+  - python-firewall
 
 users:
   - name: valentine

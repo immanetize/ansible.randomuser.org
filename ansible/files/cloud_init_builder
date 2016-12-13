@@ -21,6 +21,7 @@ packages:
   - redhat-rpm-config
   - rpmbuild-tools
   - rpmdev-tools
+  - python-firewall
   - python-rpm-macros
   - python3-rpm-macros
   - python-srpm-macros

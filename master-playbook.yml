@@ -40,9 +40,6 @@
     - ~/ansible.randomuser.org/ansible/vars/global.yml
     - ~/ansible.randomuser.org/ansible/vars/mailserver.yml
   tasks:
-    - name: all cloud servers should have this, do it better later
-      dnf: name=python-firewall state=present
-    - debug: var=volume
     - name: install git for certbot
       dnf: name=git state=present
     - name: open firewall for certbot
