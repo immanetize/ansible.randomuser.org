@@ -33,13 +33,18 @@
 #    - placeholder: True
 #  roles:
 #    - ipsec_endpoint
+- name: do gateway stuff
+  hosts: gateway.randomuser.org
+  vars_files:
+    - ~/ansible.randomuser.org/ansible/vars/global.yml
+  tasks:
+    - include: "{{tasks}}/rax/create_rackspace_dns_record.yml"
 
 - name: deploy a mailserver
   hosts: proteus.randomuser.org
   vars_files: 
     - ~/ansible.randomuser.org/ansible/vars/global.yml
     - ~/ansible.randomuser.org/ansible/vars/mailserver.yml
-    - ~/ansible.randomuser.org/ansible/vars/ipsec.yml
   tasks:
     - name: install git for certbot
       dnf: name=git state=present
