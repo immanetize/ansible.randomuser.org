@@ -3,6 +3,8 @@
 image: c3c47721-9e28-403a-9ea0-013fd665577d
 flavor: general1-2
 cloud_networks:
-  - dfw_management
+  - public
+  - private
+  - interlan.randomuser.org
 cloud_init_file: /home/pete/ansible.randomuser.org/ansible/files/proteus
 region: IAD
