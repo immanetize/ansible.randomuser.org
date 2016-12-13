@@ -39,6 +39,7 @@
   vars_files: 
     - ~/ansible.randomuser.org/ansible/vars/global.yml
     - ~/ansible.randomuser.org/ansible/vars/mailserver.yml
+    - ~/ansible.randomuser.org/ansible/vars/ipsec.yml
   tasks:
     - name: install git for certbot
       dnf: name=git state=present

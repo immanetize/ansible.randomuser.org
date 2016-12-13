@@ -1,5 +1,0 @@
-strongswan_conn:
-  - name: home
-    left: {{ hostvars['gateway.randomuser.org']['ansible_default_ipv4']['address']
-    leftsubnet: 10.27.0.0/18
-
