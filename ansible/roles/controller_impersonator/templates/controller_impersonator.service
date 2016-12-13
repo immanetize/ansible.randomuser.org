@@ -1,0 +1,15 @@
+[Unit]
+Description=controller.randomuser.org impersonator service
+After=network.target
+
+[Service]
+Type=forking
+User=valentine
+ExecStart=/usr/bin/ssh -a
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target

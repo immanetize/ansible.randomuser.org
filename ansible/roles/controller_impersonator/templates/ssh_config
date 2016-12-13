@@ -1,0 +1,7 @@
+Host *
+  PasswordAuthentication No
+  AddressFamily inet6
+  BatchMode yes
+  IdentitiesOnly yes 
+Host gateway.randomuser.org
+  IdentityFile {{secure_path}}

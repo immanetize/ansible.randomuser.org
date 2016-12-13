@@ -1,0 +1,29 @@
+- name: create working directory
+  file:
+    group=valentine
+    owner=valentine
+    path="{{secure_path}}"
+    state=directory
+    mode=0700
+- name: create keypair
+  become: yes
+  become_user: valentine
+  shell: "
+    ssh-keygen
+      -C '{{ansible_hostname}}_controller_access'
+      -b 521
+      -f {{secure_path}}/gateway_ed25519
+      -t ed25519
+      -N '' creates={{secure_path}}/gateway_ed25519"
+- name: get pubkey
+  shell: cat {{secure_path}}/gateway_ed25519.pub
+  register: pubkey
+- name: insert pubkey
+  delegate_to: gateway.randomuser.org
+  lineinfile:
+    dest="~valentine/.ssh/authorized_keys"
+    create=yes
+    line="{{pubkey.stdout}}"
+    state=present
+
+

@@ -1,0 +1,12 @@
+[Unit]
+Description=controller.randomuser.org impersonator socket
+
+[Socket]
+ListenStream=10.27.0.89:53
+ListenStream=10.27.0.89:88
+ListenStream=10.27.0.89:464
+ListenStream=10.27.0.89:636
+Accept=yes
+
+[Install]
+WantedBy=sockets.target
