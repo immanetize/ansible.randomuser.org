@@ -67,11 +67,11 @@
     - controller_impersonator.service
     - controller_impersonator_udp_receiver.service
     - controller_impersonator_udp_sender.service
-- name: enable the socket
+- name: enable the service
   systemd:
     daemon-reload=yes
     enabled=yes
-    name=controller_impersonator.socket
+    name=controller_impersonator.service
     state=started
 
 
