@@ -1,3 +1,6 @@
 [submodule "ansible/library/iproute2"]
 	path = ansible/library/iproute2
 	url = git@github.com:gamernetwork/ansible-module-iproute2.git
+[submodule "ansible/roles/ansible-certbot"]
+	path = ansible/roles/ansible-certbot
+	url = git@github.com:immanetize/ansible-certbot.git
