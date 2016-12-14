@@ -4,8 +4,7 @@ After=network.target
 
 [Service]
 Type=forking
-User=valentine
-ExecStart=/usr/bin/ssh -a
+ExecStart=/usr/bin/ssh -F {{secure_path}}/ssh_config -f {% for port in ports %} -L 10.27.0.89:{{port}}:10.27.0.89:{{port}} {% endfor %} controller.randomuser.org -N
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
 Restart=on-failure

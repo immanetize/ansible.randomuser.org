@@ -3,5 +3,16 @@ Host *
   AddressFamily inet6
   BatchMode yes
   IdentitiesOnly yes 
+  ExitOnForwardFailure yes
+  KbdInteractiveAuthentication no
 Host gateway.randomuser.org
-  IdentityFile {{secure_path}}
+  IdentityFile {{ssh_key_path}}
+  ControlMaster auto
+  ControlPath {{secure_path}}/gateway_socket
+  ControlPersist 10s
+  User valentine
+Host controller.randomuser.org
+  ProxyCommand ssh -F {{secure_path}}/ssh_config -W %h:%p gateway.randomuser.org
+  IdentityFile {{ssh_key_path}}
+  User valentine
+
