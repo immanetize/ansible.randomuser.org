@@ -12,6 +12,7 @@ Host gateway.randomuser.org
   ControlPersist 10s
   User valentine
 Host controller.randomuser.org
+  AddressFamily inet
   ProxyCommand ssh -F {{secure_path}}/ssh_config -W %h:%p gateway.randomuser.org
   IdentityFile {{ssh_key_path}}
   User valentine
