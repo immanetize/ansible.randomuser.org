@@ -65,7 +65,8 @@
     dest=/etc/systemd/system/
   with_items:
     - controller_impersonator.service
-    - controller_impersonator.socket
+    - controller_impersonator_udp_receiver.service
+    - controller_impersonator_udp_sender.service
 - name: enable the socket
   systemd:
     daemon-reload=yes
