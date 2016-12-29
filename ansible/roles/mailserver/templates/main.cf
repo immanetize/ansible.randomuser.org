@@ -36,3 +36,4 @@ sample_directory = /usr/share/doc/postfix/samples
 readme_directory = /usr/share/doc/postfix/README_FILES
 meta_directory = /etc/postfix
 shlib_directory = /usr/lib64/postfix
+home_mailbox = ~/.maildir/

@@ -8,11 +8,10 @@
 - name: copy dovecot conf templates
   template:
     src="{{item}}"
-    dest=/etc/
+    dest="/etc/{{item}}"
   with_items:
     - dovecot/conf.d/10-auth.conf
     - dovecot/conf.d/10-mail.conf
     - dovecot/conf.d/10-ssl.conf
     - dovecot/dovecot.conf
-
 

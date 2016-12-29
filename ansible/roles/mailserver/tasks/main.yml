@@ -1,21 +1,4 @@
 ---
 - include: "{{tasks}}/rax/lvm.yml"
-
-- name: install relevant packages
-  dnf:
-    name={{item}}
-    state=present
-  with_items:
-    - postfix
-- name: deploy config templates
-  template:
-    src="{{item}}"
-    dest="/etc/postfix/{{item}}"
-  with_items:
-    - main.cf
-    - master.cf
-- name: start the thing
-  service:
-    name=postfix
-    state=restarted
-    enabled=True
+- include: postfix.yml
+- include: dovecot.yml

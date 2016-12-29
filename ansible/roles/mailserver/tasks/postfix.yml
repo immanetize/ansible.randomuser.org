@@ -1,0 +1,26 @@
+---
+- name: install relevant packages
+  dnf:
+    name={{item}}
+    state=present
+  with_items:
+    - postfix
+- name: deploy config templates
+  template:
+    src="{{item}}"
+    dest="/etc/postfix/{{item}}"
+  with_items:
+    - main.cf
+    - master.cf
+- name: create maildir skel
+  file:
+    name="/etc/skel/.maildir/{{item}}"
+    state=directory
+  with_items: ['new', 'cur', 'tmp']
+   
+
+- name: start the thing
+  service:
+    name=postfix
+    state=restarted
+    enabled=True
