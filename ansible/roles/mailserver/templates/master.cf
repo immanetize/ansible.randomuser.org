@@ -18,6 +18,8 @@ local     unix  -       n       n       -       -       local
 virtual   unix  -       n       n       -       -       virtual
 lmtp      unix  -       -       n       -       -       lmtp
 anvil     unix  -       -       n       -       1       anvil
+smtps     inet  n       -       n       -       -       smtpd -Dv
+smtp      unix  -       -       n       -       -       smtp
 submission inet n       -       -       -       -       smtpd
   -o syslog_name=postfix/submission
   -o smtpd_tls_wrappermode=no
@@ -27,3 +29,5 @@ submission inet n       -       -       -       -       smtpd
   -o milter_macro_daemon_name=ORIGINATING
   -o smtpd_sasl_type=dovecot
   -o smtpd_sasl_path=/var/run/dovecot/auth-userdb
+dovecot   unix  -       n       n       -       -       pipe
+  flags=DRhu user=dovenull:dovenull argv=/usr/local/libexec/dovecot/dovecot-lda -f ${sender} -d ${recipient}

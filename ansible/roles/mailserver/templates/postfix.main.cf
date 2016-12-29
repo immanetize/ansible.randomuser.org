@@ -10,6 +10,7 @@ queue_directory = /var/spool/postfix
 command_directory = /usr/sbin
 daemon_directory = /usr/libexec/postfix
 data_directory = /var/lib/postfix
+mailbox_transport = /var/run/dovecot/lmtp
 mail_owner = postfix
 
 myhostname = {{ansible_fqdn}}
