@@ -51,6 +51,8 @@
   vars_files: 
     - ~/ansible.randomuser.org/ansible/vars/global.yml
     - ~/ansible.randomuser.org/ansible/vars/mailserver.yml
+  vars:
+    rax_uuid: "{{lookup('pipe', 'cat /var/lib/cloud/data/instance-id'}}"
   tasks:
     - name: install git for certbot
       dnf: name=git state=present
