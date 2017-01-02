@@ -9,7 +9,7 @@ smtpd_tls_security_level=may
 smtpd_tls_protocols = TLSv1.2
 smtpd_tls_ciphers = HIGH
 smtpd_sasl_type = dovecot
-smtpd_sasl_path = /var/run/dovecot/auth-userdb
+smtpd_sasl_path = /var/spool/postfix/private/auth
 smtpd_sasl_auth_enable = yes
 local_recipient_maps = proxy:unix:passwd.byname $alias_maps
 
