@@ -1,0 +1,6 @@
+- name: install dkim packages
+  dnf:
+    name={{item}}
+    state=present
+  with_items:
+    - opendkim

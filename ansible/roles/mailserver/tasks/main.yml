@@ -3,3 +3,4 @@
 - include: postfix.yml
 - include: dovecot.yml
 - include: dns.yml
+- include: dkim.yml
