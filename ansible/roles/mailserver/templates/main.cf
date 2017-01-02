@@ -40,3 +40,10 @@ readme_directory = /usr/share/doc/postfix/README_FILES
 meta_directory = /etc/postfix
 shlib_directory = /usr/lib64/postfix
 home_mailbox = ~/.maildir/
+
+# spf
+policy_time_limit = 3600
+smtpd_recipient_restrictions =
+  reject_unauth_destination,
+  check_policy_service unix:private/policyd-spf
+

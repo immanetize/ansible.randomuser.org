@@ -18,6 +18,8 @@ local     unix  -       n       n       -       -       local
 virtual   unix  -       n       n       -       -       virtual
 lmtp      unix  -       -       n       -       -       lmtp
 anvil     unix  -       -       n       -       1       anvil
+policyd-spf  unix  -       n       n       -       0       spawn
+  user=nobody argv=/usr/libexec/postfix/policyd-spf
 smtps     inet  n       -       n       -       -       smtpd
   -o syslog_name=postfix/smtps
   -o smtpd_tls_wrappermode=yes
