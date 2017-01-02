@@ -12,6 +12,18 @@
     region=DFW
     state=present
     type=MX
+- name: create SPF record
+  delegate_to: localhost
+  rax_dns_record:
+    creds_file="{{rax_creds_file}}"
+    data="v=spf1 mx mx:{{ansible_fqdn}} -all"
+    domain="{{'.'.join(ansible_fqdn.split('.')[1:])}}"
+    name="{{'.'.join(ansible_fqdn.split('.')[1:])}}"
+    region=DFW
+    state=present
+    type=TXT
+
+
 - name: claim a PTR record
   delegate_to: localhost
   rax_dns_record:
@@ -20,18 +32,7 @@
     type=PTR
     data="{{ansible_default_ipv4.address}}"
     server="{{uuid.stdout}}"
-    region=DFW
+    region=IAD
     state=present
-
-- name: create SPF record
-  delegate_to: localhost
-  rax_dns_record:
-    creds_file="{{rax_creds_file}}"
-    data="v=spf1 mx mx:{{domain}} -all"
-    domain="{{'.'.join(ansible_fqdn.split('.')[1:])}}"
-    region=DFW
-    state=present
-    type=MX
-
 
 #rdns: domain="{{.'.join(ansible_default_ipv4.address.split('.')[::-1]) + '.in-addr.arpa'}}"
