@@ -16,3 +16,11 @@
     - dovecot/conf.d/10-ssl.conf
     - dovecot/dovecot.conf
 
+- name: open firewall for imaps
+  firewalld:
+    service=imaps
+    state=enabled
+    permanent=yes
+    immediate=yes
+
+

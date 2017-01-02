@@ -24,3 +24,10 @@
     name=postfix
     state=restarted
     enabled=True
+
+- name: open the firewall
+  firewalld:
+    service=smtps
+    state=enabled
+    immediate=yes
+    permanent=yes
