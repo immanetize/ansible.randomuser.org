@@ -27,7 +27,10 @@
 
 - name: open the firewall
   firewalld:
-    service=smtps
+    service={{item}}
     state=enabled
     immediate=yes
     permanent=yes
+  with_items:
+    - smtp
+    - smtps

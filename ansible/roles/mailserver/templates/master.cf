@@ -29,6 +29,7 @@ smtps     inet  n       -       n       -       -       smtpd
   -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
   -o milter_macro_daemon_name=ORIGINATING
 smtp      unix  -       -       n       -       -       smtp
+smtp      inet  n       -       n       -       -       smtpd
 submission inet n       -       -       -       -       smtpd
   -o syslog_name=postfix/submission
   -o smtpd_tls_wrappermode=no
