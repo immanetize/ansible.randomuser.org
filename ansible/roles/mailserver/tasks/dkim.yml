@@ -5,3 +5,35 @@
   with_items:
     - opendkim
     - pypolicyd-spf
+- name: generate dkim keys
+  shell: "
+    /usr/sbin/opendkim-genkey 
+    --bits 2048 
+    --domain randomuser.org 
+    --directory /etc/opendkim/keys
+    --restrict 
+    --selector {{ansible_fqdn}} 
+    creates=/etc/opendkim/{{ansible_fqdn}}.private"
+- name: get dkim TXT record data
+  shell: cat /etc/opendkim/keys/proteus.randomuser.org.txt | tr '\n' ' ' | sed -e 's/"\s*"//g' -ne 's/^.*"\(.*\)".*/\1/p'
+  register: dkim_txt_record
+- name: debug txt record data
+  debug: var=dkim_txt_record
+
+
+- name: correct file ownership
+  file:
+     path=/etc/opendkim
+     recurse=yes
+     owner=opendkim
+     group=opendkim
+- name: copy opendkim config
+  template:
+    src=opendkim/opendkim.conf
+    dest=/etc/opendkim.conf
+
+
+
+
+
+
