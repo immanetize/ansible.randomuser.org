@@ -13,7 +13,7 @@
     - exnet: public
     - servicenet: private
   handlers:
-    - include: "{{ tasks }}/rax/deploy_shim.yml"
+    - include: "{{ tasks }}/deploy_shim.yml"
   tasks:
     - include: "{{ tasks }}/rax/create_rackspace_domain.yml"
     - include: "{{ tasks }}/rax/create_rackspace_networks.yml"
