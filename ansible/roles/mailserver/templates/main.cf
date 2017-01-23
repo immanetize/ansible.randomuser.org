@@ -40,6 +40,7 @@ readme_directory = /usr/share/doc/postfix/README_FILES
 meta_directory = /etc/postfix
 shlib_directory = /usr/lib64/postfix
 home_mailbox = ~/.maildir/
+mailbox_command = /usr/libexec/dovecot/dovecot-lda -f "$SENDER" -a "$RECIPIENT"
 
 # spf
 policy_time_limit = 3600
