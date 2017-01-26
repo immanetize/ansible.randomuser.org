@@ -1,38 +1,5 @@
 ---
-- name: deploy cloud hosts
-  hosts: localhost
-  gather_facts: False
-  connection: local 
-  vars_files: 
-    - ~/ansible.randomuser.org/ansible/vars/global.yml
-    - ~/ansible.randomuser.org/ansible/vars/cloud_networks.yml 
-  vars:
-    - create_group: cloud_hosts
-    - domains:
-      - randomuser.org
-    - exnet: public
-    - servicenet: private
-  handlers:
-    - include: "{{ tasks }}/deploy_shim.yml"
-  tasks:
-    - include: "{{ tasks }}/rax/create_rackspace_domain.yml"
-    - include: "{{ tasks }}/rax/create_rackspace_networks.yml"
-    - include: "{{ tasks }}/rax/create_rackspace_instance.yml" 
-
-#- name: make ipsec endpont
-#  hosts: 
-#    - proteus.randomuser.org
-#    - gateway.randomuser.org
-#  become: True
-#  become_method: sudo
-#  gather_facts: True
-#  vars_files: 
-#    - ~/ansible.randomuser.org/ansible/vars/global.yml
-#    - ~/ansible.randomuser.org/ansible/vars/cloud_networks.yml 
-#  vars:
-#    - placeholder: True
-#  roles:
-#    - ipsec_endpoint
+- include: cloud_spinup.yml
 - name: do gateway stuff
   hosts: gateway.randomuser.org
   vars_files:

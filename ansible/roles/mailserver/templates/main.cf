@@ -1,5 +1,5 @@
-myhostname = proteus.randomuser.org
-mydomain = randomuser.org
+myhostname = {{ ansible_fqdn }}
+mydomain = {{'.'.join(ansible_fqdn.split('.')[1:])}}
 smtpd_tls_cert_file={{certbot_path_public}}
 smtpd_tls_key_file={{certbot_path_private}}
 smtpd_use_tls=yes
@@ -21,7 +21,7 @@ data_directory = /var/lib/postfix
 mail_owner = postfix
 inet_interfaces = all
 inet_protocols = all
-mydestination = $myhostname, localhost.$mydomain, localhost
+mydestination = $mydomain, $myhostname, localhost.$mydomain, localhost
 unknown_local_recipient_reject_code = 550
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
@@ -41,10 +41,17 @@ meta_directory = /etc/postfix
 shlib_directory = /usr/lib64/postfix
 home_mailbox = ~/.maildir/
 mailbox_command = /usr/libexec/dovecot/dovecot-lda -f "$SENDER" -a "$RECIPIENT"
-
-# spf
-policy_time_limit = 3600
 smtpd_recipient_restrictions =
+  permit_sasl_authenticated,
   reject_unauth_destination,
   check_policy_service unix:private/policyd-spf
+
+virtual_transport = lmtp:unix:/var/run/dovecot/lmtp
+
+# opendkim
+smtpd_milters           = inet:127.0.0.1:8891
+non_smtpd_milters       = $smtpd_milters
+milter_default_action   = accept
+milter_protocol         = 2
+##
 
