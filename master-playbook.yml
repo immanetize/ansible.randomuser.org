@@ -43,9 +43,10 @@
   hosts: proteus.randomuser.org
   vars_files: 
     - ~/ansible.randomuser.org/ansible/vars/global.yml
+    - ~/ansible.randomuser.org/ansible/vars/blog.yml
   roles: 
     - controller_impersonator
-
+    - blog_server
 #- name: deploy a mailserver
 #  hosts: proteus.randomuser.org
 #  vars_files: 
