@@ -1,0 +1,12 @@
+- name: create required networks
+  delegate_to: localhost
+  rax_network:
+    label: "{{item}}"
+    region: "{{region}}"
+    cidr: "{{networks_regions[region][item]['subnet']}}"
+    creds_file: "{{rax_creds_file}}"
+  with_items: "{{build_parameters.networks}}"
+  tags: 
+    - network_topology
+    - rax_networks
+

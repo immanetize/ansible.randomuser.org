@@ -1,7 +1,10 @@
-[cloud_hosts]
+[rax_cloud_hosts]
 atomic.randomuser.org
 [atomic_hosts]
 atomic.randomuser.org
+[IAD]
+atomic.randomuser.org
+
 [core_virtual_machines]
 [home_infrastructure]
 gateway.randomuser.org

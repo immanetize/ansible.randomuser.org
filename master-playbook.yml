@@ -1,0 +1,9 @@
+- name: build rax cloud hosts
+  hosts: rax_cloud_hosts
+  #  vars_files: 
+  #  - ~/ansible.randomuser.org/ansible/defaults/main.yml
+  tags:
+    - build
+    - cloud_build
+  roles:
+    - rax_cloud_build
