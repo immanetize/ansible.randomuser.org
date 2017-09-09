@@ -10,3 +10,33 @@
     - network_topology
     - rax_networks
 
+- name: create DNS domain
+  delegate_to: localhost
+  rax_dns:
+    creds_file: "{{rax_creds_file}}"
+    comment: "{{ inventory_hostname.split('.')[1:] }} DNS"
+    email: "pete@{{ inventory_hostname.split('.')[1:] }}"
+    name: "{{ inventory_hostname.split('.')[1:] }}"
+    region: "{{ region }}"
+    state: present
+  tags:
+    - DNS
+
+- name: build the server
+  delegate_to: localhost
+  rax:
+    exact_count: yes
+    count: 1
+    creds_file: "{{rax_creds_file}}"
+    name: "{{ inventory_hostname }}"
+    group: "{{ inventory_hostname }}"
+    auto_increment: no
+    image: "{{ rax_image }}"
+    flavor: "{{ rax_flavor }}"
+    config_drive: yes
+    user_data: "{{ cloud_init_file }}"
+    state: present
+    wait: yes
+    wait_timeout: 300
+  register: rax
+
