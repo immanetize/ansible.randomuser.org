@@ -1,6 +1,7 @@
 [cloud_hosts]
-eos.randomuser.org
-proteus.randomuser.org
+atomic.randomuser.org
+[atomic_hosts]
+atomic.randomuser.org
 [core_virtual_machines]
 [home_infrastructure]
 gateway.randomuser.org

@@ -1,0 +1,28 @@
+rax_creds_file: ~/.rack_personal
+networks_regions:
+  IAD:
+    - name: interlan.randomuser.org
+      type: rax_cloud
+      subnet: 10.27.143.0/24
+    - name: docker.randomuser.org
+      type: rax_cloud
+      subnet: 10.27.209.0/24
+  DFW:
+    - name: interlan.randomuser.org
+      type: rax_cloud
+      subnet: 10.27.214.0/24
+  HOME:
+    - name: home.randomuser.org
+      type: physical
+      subnet: 10.27.0.0/24
+    - name: guest.randomuser.org
+      type: pysical
+      subnet: 10.27.16.0/24
+    - name: iot.randomuser.org
+      type: physical
+      subnet: 10.27.40.0/24
+    - name: cctv.randomuser.org
+      type: physical
+      subnet: 10.27.80.0/24
+    
+

@@ -1,9 +1,0 @@
----
-- include: 
-  - letsencrypt_copr_install.yml
-
-- name: install letsencrypt packages
-  dnf:
-    name=letsencrypt
-    state=present
-

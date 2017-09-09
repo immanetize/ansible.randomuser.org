@@ -3,3 +3,5 @@ private/*
 ./*/private/*
 context/log/*
 *retry
+virtualenv
+*.swp

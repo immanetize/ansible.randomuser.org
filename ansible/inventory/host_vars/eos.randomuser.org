@@ -1,8 +1,0 @@
----
-# F22
-image: 8ffcfdcd-7e44-4e84-92f7-e11e04401642
-flavor: performance1-2
-cloud_networks:
-  - dfw_management
-cloud_init_file: "{{ files }}/cloud_init_generic"
-region: DFW
