@@ -18,6 +18,13 @@ I make some basic assumptions about things not described in the playbook.
 - `~/.ssh/config` has functional directives for any users or ssh keys not declared in the playbooks.
   This is a must when dealing with multiple environments using ansible or just plain ssh.
 
+- You should decide on a domain name before you start using this, and configure your workstation with
+  a hostname in that domain::
+
+    ~ ]$ hostnamectl set-hostname workstation.randomuser.org
+
+  Feel free to choose your own hostname (really, don't recycle mine, it won't work out), the playbook
+  will be referencing this when naming new hosts.
 Guiding principles
 ------------------
 Some basic design parameters for the playbooks and evironment:
