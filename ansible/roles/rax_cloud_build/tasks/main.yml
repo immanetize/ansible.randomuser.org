@@ -1,12 +1,12 @@
 - name: create required networks
   delegate_to: localhost
-  os_network:
+  rax_network:
     label: "{{ item.name }}"
     region: "{{ region }}"
     cidr: "{{ item.subnet }}"
     creds_file: "{{rax_creds_file}}"
-  with_items: networks_by_region[region]
-  when: item.name in build_parameters.network
+  with_items: "{{ networks_by_region[region] }}"
+  when: item.name in build_parameters.networks
   tags: 
     - network_topology
     - rax_networks
@@ -30,9 +30,10 @@
     count: 1
     creds_file: "{{rax_creds_file}}"
     name: "{{ inventory_hostname }}.{{ domain }}"
+    region: "{{ region }}"
     group: "{{ inventory_hostname }}.{{ domain }}"
     auto_increment: no
-    image: "{{ rax_image }}"
+    image: "{{ build_parameters.rax_image }}"
     flavor: "{{ rax_flavor }}"
     config_drive: yes
     user_data: "{{ cloud_init_file }}"
