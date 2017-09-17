@@ -1,7 +1,7 @@
 - name: create required networks
   delegate_to: localhost
   os_network:
-    label: "{{ item }}"
+    label: "{{ item.name }}"
     region: "{{ region }}"
     cidr: "{{ item.subnet }}"
     creds_file: "{{rax_creds_file}}"
@@ -15,9 +15,9 @@
   delegate_to: localhost
   rax_dns:
     creds_file: "{{rax_creds_file}}"
-    comment: "{{ inventory_hostname.split('.')[1:] }} DNS"
-    email: "pete@{{ inventory_hostname.split('.')[1:] }}"
-    name: "{{ inventory_hostname.split('.')[1:] }}"
+    comment: "{{ domain }} DNS"
+    email: "pete@{{ domain }}"
+    name: "{{ domain }}"
     region: "{{ region }}"
     state: present
   tags:
@@ -29,8 +29,8 @@
     exact_count: yes
     count: 1
     creds_file: "{{rax_creds_file}}"
-    name: "{{ inventory_hostname }}"
-    group: "{{ inventory_hostname }}"
+    name: "{{ inventory_hostname }}.{{ domain }}"
+    group: "{{ inventory_hostname }}.{{ domain }}"
     auto_increment: no
     image: "{{ rax_image }}"
     flavor: "{{ rax_flavor }}"

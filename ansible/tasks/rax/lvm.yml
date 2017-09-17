@@ -22,11 +22,11 @@
 - name: attach cbs volumes
   delegate_to: localhost
   rax_cbs_attachments:
-    creds_file="{{rax_creds_file}}"
-    server=proteus.randomuser.org
-    region=IAD
-    volume="{{item['volume']['id']}}"
-    state=present
+    creds_file: "{{rax_creds_file}}"
+    server: "{{inventory_hostname}}.{{ domain }}"
+    region: "{{ region }}"
+    volume: "{{item['volume']['id']}}"
+    state: present
   with_items: "{{ cbs_volumes.results }}"
   register: cbs_attach
 

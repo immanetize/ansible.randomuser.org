@@ -18,4 +18,4 @@ users:
     gecos: Service Account for Ansible
     sudo: ALL=(ALL) NOPASSWD:ALL
     ssh-authorized-keys:
-      - ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBABGes5YCHHMD/eCWQaINvU044uwM0lyWJvimU9zy/TaaLKzrMsjyoNqn8C+CPtBs3tHt9gDNkNdlrDZRtNIIQJ8iQEjcR4CTleUo6PIcJB26o/4wh/hZoMaavtXGx7IaEpVyHQ/nQb2dNG4HH/FXGdfkF9TBm6uNsO8eGjPrB2GEiZeeA== keypair for randomuser.org cloud servers
+      - ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBABGes5YCHHMD/eCWQaINvU044uwM0lyWJvimU9zy/TaaLKzrMsjyoNqn8C+CPtBs3tHt9gDNkNdlrDZRtNIIQJ8iQEjcR4CTleUo6PIcJB26o/4wh/hZoMaavtXGx7IaEpVyHQ/nQb2dNG4HH/FXGdfkF9TBm6uNsO8eGjPrB2GEiZeeA==
