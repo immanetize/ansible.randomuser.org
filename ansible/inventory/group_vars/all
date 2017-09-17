@@ -1,26 +1,26 @@
 networks_regions:
   IAD:
-    interlan.randomuser.org:
+    - name: "interlan.{{domain}}"
       type: rax_cloud
       subnet: 10.27.143.0/24
-    docker.randomuser.org:
+    - name: "docker.{{domain}}"
       type: rax_cloud
       subnet: 10.27.209.0/24
   DFW:
-    interlan.randomuser.org:
+    - name: "interlan.{{domain}}"
       type: rax_cloud
       subnet: 10.27.214.0/24
   HOME:
-    home.randomuser.org:
+    - name: "home.{{domain}}"
       type: physical
       subnet: 10.27.0.0/24
-    guest.randomuser.org:
+    - name: "guest.{{domain}}"
       type: pysical
       subnet: 10.27.16.0/24
-    iot.randomuser.org:
+    - name: "iot.{{domain}}"
       type: physical
       subnet: 10.27.40.0/24
-    cctv.randomuser.org:
+    - name: "cctv.{{domain}}"
       type: physical
       subnet: 10.27.80.0/24
 
