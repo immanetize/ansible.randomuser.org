@@ -1,0 +1,151 @@
+lvm recommended for resize flexibility
+do not use high latency storage for working filesystems 
+  READ: do not use NFS, and if you do anyway, `-o bg,nolock,noatime`
+  READ: do not back with GFS2
+  READ: just use san or local, ssd preferred.
+
+xfs preferred over ext4( inode limitations)  
+
+satellite:
+    pulp:
+
+      - 10G+ /var/cache/pulp
+      - 500G + /var/cache/pulp
+      - /var/lib/pulp 20G+ (content dir, will grow)
+      -
+
+    mongo:
+      - /var/lib/mongodb 50G (will grow, no nfs, no symlinks)
+        
+     postgres:
+      - /var/lib/pgsql 10G
+      
+     web interface:
+        -? http of some kind (ports 80, 443)
+        -? storage for http unknow
+
+    mongo: 
+     - /var/lib/mongodb 50G+
+
+
+logdirs:
+  - /var/log/messages
+  - /var/log/httpd/
+  - /var/lib/foreman-proxy/openscap/content
+
+
+client to satellite communication:
+- port: 80/tcp
+	proto: http
+	usage: "Anaconda, yum, for obtaining Katello certificates, templates, and for downloading iPXE firmware"
+- port: 443/tcp
+	proto: https
+	usage: "Subscription Management Services, yum, Telemetry Services, and for connection to the Katello Agent"
+- port: 5647/tcp
+	proto: amqp
+	usage: "The Katello Agent to communicate with the Satellite’s Qpid dispatch router"
+- port: 8000
+  proto: HTTPS
+  usage: "Anaconda to download kickstart templates to hosts, and for downloading iPXE firmware"
+- port: 8140/tcp
+  proto: https
+  usage: "Puppet agent to Puppet master connections"
+- port: 9090/tcp
+  proto: https:
+  usage: "Sending SCAP reports to the Smart Proxy in the integrated Capsule and for the discovery image during provisioning"
+- port: 5000/tcp
+  proto: https
+  usage: "Connection to Katello for the Docker registry"
+
+client to capsule communication:
+  - port: 80/tcp
+    service: http
+    usage: "Anaconda, yum, and for obtaining Katello certificate updates"
+  - port: 443/tcp
+    service: https
+    usage: "Anaconda, yum, Telemetry Services, and Puppet"
+  - port: 5647/tcp
+    service: AMQP
+    usage: "The Katello agent to communicate with the Capsule’s Qpid dispatch router"
+  - port: 8000/tcp
+    service: https
+    usage: "Anaconda to download kickstart templates to hosts, and for downloading iPXE firmware"
+  - port: 8140/tcp
+    service: https
+    usage: "Puppet agent to Puppet master connections"
+  - port: 8443/tcp
+    service: https
+    usage: "Subscription Management Services and Telemetry Services"
+  - port: 9090/tcp
+    service: https
+    usage: "Sending SCAP reports to the Smart Proxy in the Capsule and for the discovery image during provisioning"
+  - port: 5000/tcp
+    service: https
+    usage: "Connection to Katello for the Docker registry"
+Table 2.7. Ports for Capsule to Satellite Communication
+Port  Protocol  Service Required For
+  - port: 443/tcp
+    service: https
+    usage: "Connections to Katello, Foreman, Foreman API, and Pulp"
+  - port: 5646/tcp
+    service: AMQP
+    usage: "Capsule’s Qpid dispatch router to Qpid dispatch router in the Satellite"
+  - port: 5647/tcp
+    service: AMQP
+    usage: "The Katello agent to communicate with the Satellite’s Qpid dispatch router"
+  - port: 5000/tcp
+    service: https
+    usage: "Connection to Katello for the Docker registry"
+Remember that the base system on which a Capsule Server is running is a client connected to the Satellite Server. See the table Ports for Client to Satellite Communication.
+Table 2.8. Ports for Satellite to Capsule Communication
+Port  Protocol  Service Required For
+  - port: 443/tcp
+    service: https
+    usage: "Connections to the Pulp server in the Capsule"
+  - port: 9090/tcp
+    service: https
+    usage: "Connections to the proxy in the Capsule"
+  - port: 80/tcp
+    service: http
+    usage: "Downloading a bootdisk (Optional)"
+Table 2.9. Optional Network Ports
+Port  Protocol  Service Required For
+  - port: 7/tcp AND uDP
+    service: icmp
+    usage: "DHCP Capsule to Client network, ICMP ECHO to verify IP address is free"
+  - port: 22/tcp
+    service: ssh
+    usage: "Satellite and Capsule originated communications, for Remote Execution (Rex)"
+  - port: 53/tcp AND uDP
+    service: dns
+    usage: "Client to Capsule DNS queries to a Capsule’s DNS service"
+  - port: 67/udp
+    service: dhcp
+    usage: "Client to Capsule broadcasts, DHCP broadcasts for Client provisioning from a Capsule"
+  - port: 68/udp
+    service: dhcp
+    usage: "Capsule to Client broadcasts, DHCP broadcasts for Client provisioning from a Capsule"
+  - port: 69/udp
+    service: tftp
+    usage: "Clients downloading PXE boot image files from a Capsule for provisioning"
+  - port: 8443/tcp
+    service: http
+    usage: "Capsule to Client "reboot" command to a discovered host during provisioning"
+  - port: 7911/tcp
+    service: dhcp
+    usage: "Capsule originated commands for orchestration of DHCP records (local or external)"
+If DHCP is provided by an external service, you must open the port on the external server.
+  - port: 5000/tcp
+    service: http
+    usage: "Satellite originated communications, for compute resources in OpenStack or for running Docker containers"
+  - port: 22, 16514/tcp
+    service: ssh, ssl/TLS
+    usage: "Satellite originated communications, for compute resources in libvirt"
+  - port: 389, 636/tcp
+    service: ldap, ldaPS
+    usage: "Satellite originated communications, for LDAP and secured LDAP authentication sources"
+  - port: 5900 to 5930/tcp
+    service: ssl/tls
+    usage: "Satellite originated communications, for NoVNC console in web UI to hypervisors"
+NOTE
+A DHCP Capsule sends an ICMP ECHO to confirm an IP address is free, no response of any kind is expected. ICMP can be dropped by a networked-based firewall, but any response will prevent IP addresses being allocated.
