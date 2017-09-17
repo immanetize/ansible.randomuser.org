@@ -2,5 +2,5 @@ build_parameters:
   rax_image: 03376381-7584-4692-b216-a753f3c4b9de
   rax_image_name: f26_atomic-xe+nova_enabled
   networks:
-    - docker.randomuser.org
-    - interlan.randomuser.org
+    - "docker.{{domain}}"
+    - "interlan.{{domain}}"
