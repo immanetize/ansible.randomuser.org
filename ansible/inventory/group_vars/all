@@ -1,4 +1,4 @@
-networks_regions:
+networks_by_region:
   IAD:
     - name: "interlan.{{domain}}"
       type: rax_cloud
