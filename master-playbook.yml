@@ -9,3 +9,11 @@
     - cloud_build
   roles:
     - rax_cloud_build
+
+- name: build local virt host
+  hosts: kvm_hosts
+  tags:
+    - kvm_hosts
+  roles:
+    - kvm_host
+

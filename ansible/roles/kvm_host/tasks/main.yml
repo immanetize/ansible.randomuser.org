@@ -1,0 +1,11 @@
+- name: install host packages
+  become: True
+  dnf:
+    name: "@virtualization"
+    state: present
+- name: run libvirtd
+  become: True
+  service:
+    name: libvirtd
+    state: started
+    enabled: yes

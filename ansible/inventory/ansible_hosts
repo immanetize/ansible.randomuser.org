@@ -4,6 +4,8 @@ atomic
 atomic
 [IAD]
 atomic
+[kvm_hosts]
+hypervisor[01:01]
 
 [core_virtual_machines]
 [home_infrastructure]
