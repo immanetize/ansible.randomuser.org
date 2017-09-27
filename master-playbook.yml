@@ -9,3 +9,11 @@
     - cloud_build
   roles:
     - rax_cloud_build
+
+- name: deploy dhcpd container
+  hosts:
+    - gateway.randomuser.org
+  tags:
+    - dcpd
+  roles:
+    - dhcpd_peer
