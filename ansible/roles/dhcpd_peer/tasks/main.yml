@@ -24,14 +24,14 @@
 - name: run the container
   docker_container:
     name: dhcpd
-    command: [ "/usr/sbin/dhcpd", "-f", "-cf", "/etc/dhcp/dhcpd.conf", "-user", "dhcpd", "-group", "dhcpd", "--no-pid" ]
+    image: dhcpd:latest
     memory: 128m
     log_driver: journald
-    exposed_ports: 
-      - 67/udp
+    published_ports:
+      - 10.27.0.1:67:67
     network_mode: host
     volumes: 
-      - /var/lib/dhcpd:/var/lib/dhcpd:rw
-      - /var/lib/docker/scratch/dhcpd/dhcpd.conf:/etc/dhcp/dhcpd.conf:ro
+      - /var/lib/dhcpd:/var/lib/dhcpd:Z
+      - /var/lib/docker/scratch/dhcpd/dhcpd.conf:/etc/dhcp/dhcpd.conf:Z
     state: started
     recreate: yes
