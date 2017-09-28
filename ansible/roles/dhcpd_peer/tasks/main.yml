@@ -1,1 +1,37 @@
-- include_role: non_atomic_docker_host
+- include_role: 
+    name: non_atomic_docker_host
+- name: create container scratch directory
+  file:
+    dest: /var/lib/docker/scratch/dhcpd/
+    state: directory
+- name: ship dhcpd.conf
+  template:
+    src: dhcpd.conf.j2
+    dest: /var/lib/docker/scratch/dhcpd/dhcpd.conf
+- name: send the container build info
+  template:
+    src: Dockerfile
+    dest: /var/lib/docker/scratch/dhcpd/
+
+- name: build the container image
+  docker_image:
+    state: present
+    force: yes
+    rm: yes
+    name: dhcpd
+    path: /var/lib/docker/scratch/dhcpd/
+
+- name: run the container
+  docker_container:
+    name: dhcpd
+    command: [ "/usr/sbin/dhcpd", "-f", "-cf", "/etc/dhcp/dhcpd.conf", "-user", "dhcpd", "-group", "dhcpd", "--no-pid" ]
+    memory: 128m
+    log_driver: journald
+    exposed_ports: 
+      - 67/udp
+    network_mode: host
+    volumes: 
+      - /var/lib/dhcpd:/var/lib/dhcpd:rw
+      - /var/lib/docker/scratch/dhcpd/dhcpd.conf:/etc/dhcp/dhcpd.conf:ro
+    state: started
+    recreate: yes
