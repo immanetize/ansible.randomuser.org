@@ -1,0 +1,13 @@
+shared-network home {
+	max-lease-time 6000;
+	default-lease-time 3600;
+	subnet 10.27.0.0 netmask 255.255.0.0 {
+		authoritative;
+		option domain-name-servers 10.27.0.89;
+		#option  domain-name-servers 10.27.0.1;
+		option routers 10.27.0.1;
+		option domain-name "randomuser.org";
+		range 10.27.0.100 10.27.63.255;
+		# 10.27.0.0/18
+		}
+	}
