@@ -13,12 +13,12 @@ networks_by_region:
   HOME:
     - name: "home.{{domain}}"
       type: physical
-      subnet: 10.27.0.0/24
+      subnet: 10.27.0.0/20
       gateway: 10.27.0.1
       dns: 10.27.0.89
     - name: "guest.{{domain}}"
       type: pysical
-      subnet: 10.27.16.0/24
+      subnet: 10.27.16.0/20
       gateway: 10.27.0.1
       dns: 10.27.0.89
     - name: "iot.{{domain}}"
