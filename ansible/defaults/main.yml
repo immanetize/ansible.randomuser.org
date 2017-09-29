@@ -17,7 +17,7 @@ networks_regions:
       type: physical
       subnet: 10.27.0.0/24
     - name: "guest.{{domain}}"
-      type: pysical
+      type: physical
       subnet: 10.27.16.0/24
     - name: "iot.{{domain}}"
       type: physical
