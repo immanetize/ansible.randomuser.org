@@ -1,5 +1,9 @@
 - include_role: 
     name: non_atomic_docker_host
+- debug: 
+    msg: "{{ item['subnet'] | ipaddr('address') }}"
+  with_items: "{{ networks_by_region['HOME'] }}"
+
 - name: create container scratch directory
   file:
     dest: /var/lib/docker/scratch/dhcpd/
@@ -8,6 +12,7 @@
   template:
     src: dhcpd.conf.j2
     dest: /var/lib/docker/scratch/dhcpd/dhcpd.conf
+    validate: docker run --volume %s:/etc/dhcp/dhcpd.conf:z -t dhcpd /usr/sbin/dhcpd -t
 - name: send the container build info
   template:
     src: Dockerfile

@@ -16,5 +16,7 @@
   tags:
     - dhcpd
   become: True
+  vars:
+    domain: randomuser.org
   roles:
     - dhcpd_peer

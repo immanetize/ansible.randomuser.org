@@ -1,13 +1,38 @@
-shared-network home {
+{% for region in networks_by_region %}
+shared-network {{ region }} {
 	max-lease-time 6000;
 	default-lease-time 3600;
-	subnet 10.27.0.0 netmask 255.255.0.0 {
+  {% for network in networks_by_region[region] %}
+  subnet {{ network['subnet']| ipaddr('network') }} netmask {{ network['subnet'] | ipaddr('netmask') }} {
 		authoritative;
-		option domain-name-servers 10.27.0.89;
-		#option  domain-name-servers 10.27.0.1;
-		option routers 10.27.0.1;
+    option domain-name-servers 10.27.0.89; 
+    {% if network['gateway'] is defined %}
+		option routers {{ network['gateway'] }};
+    {% endif %}
 		option domain-name "randomuser.org";
-		range 10.27.0.100 10.27.63.255;
-		# 10.27.0.0/18
-		}
-	}
+    pool {
+      range {{ network['subnet'] | ipaddr('network') | ipaddr('64') }} {{ network['subnet'] | ipaddr('200') |ipaddr('network') }};
+      {% if 'guest' in network.name %}
+      allow unknown-clients;
+      deny known-clients;
+      {% else %}
+      deny unknown-clients;
+      allow known-clients;
+      {% endif %}
+    }
+  }
+  {% endfor %}
+}
+{% endfor %}
+{% for group in groups %}
+class "{{ group }}" {
+  match hardware;
+  }
+{% endfor %}
+{% for host in groups['all'] %}
+  {% if hostvars[host]['mac_address'] is defined %}
+  host {{ host }}.{{ domain }} {
+    hardware ethernet {{ hostvars[host]['mac_address']| default('') }}
+  };
+  {% endif %}
+{% endfor %}  

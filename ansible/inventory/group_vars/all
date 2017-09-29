@@ -14,15 +14,23 @@ networks_by_region:
     - name: "home.{{domain}}"
       type: physical
       subnet: 10.27.0.0/24
+      gateway: 10.27.0.1
+      dns: 10.27.0.89
     - name: "guest.{{domain}}"
       type: pysical
       subnet: 10.27.16.0/24
+      gateway: 10.27.0.1
+      dns: 10.27.0.89
     - name: "iot.{{domain}}"
       type: physical
       subnet: 10.27.40.0/24
+      gateway: 10.27.0.1
+      dns: 10.27.0.89
     - name: "cctv.{{domain}}"
       type: physical
       subnet: 10.27.80.0/24
+      gateway: 10.27.0.1
+      dns: 10.27.0.89
 
 
 ansible_ssh_user: valentine
