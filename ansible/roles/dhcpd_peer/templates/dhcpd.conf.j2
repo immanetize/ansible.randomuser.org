@@ -1,5 +1,12 @@
+option classless-routes code 121 = array of unsigned integer 8;
+option classless-routes-win code 249 = array of unsigned integer 8;
+
 {% for region in networks_by_region %}
 shared-network {{ region }} {
+  {% if region == "HOME" %}
+  option classless-routes 24, 10,27,0,  0,0,0,0;
+  option classless-routes-win 24, 10,27,0,  0,0,0,0;
+  {% endif %}
 	max-lease-time 6000;
 	default-lease-time 3600;
   {% for network in networks_by_region[region] %}
@@ -12,6 +19,7 @@ shared-network {{ region }} {
 		option domain-name "randomuser.org";
     pool {
       {% set end_addr = network['subnet'] | ipaddr('-2') %}
+      {% set start_addr = network['subnet'] | ipaddr('-200') %}
       range {{ network['subnet'] | ipaddr('network') }} {{ end_addr[:-3] }};
       {% if 'guest' in network.name %}
       allow unknown-clients;
