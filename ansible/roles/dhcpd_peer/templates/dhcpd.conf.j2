@@ -4,8 +4,8 @@ option classless-routes-win code 249 = array of unsigned integer 8;
 {% for region in networks_by_region %}
 shared-network {{ region }} {
   {% if region == "HOME" %}
-  option classless-routes 24, 10,27,0,  0,0,0,0;
-  option classless-routes-win 24, 10,27,0,  0,0,0,0;
+  option classless-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
+  option classless-routes-win 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
   {% endif %}
 	max-lease-time 6000;
 	default-lease-time 3600;
