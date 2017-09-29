@@ -19,18 +19,18 @@ networks_by_region:
     - name: "guest.{{domain}}"
       type: pysical
       subnet: 10.27.16.0/20
-      gateway: 10.27.0.1
-      dns: 10.27.0.89
+      gateway: 10.27.16.1
+      dns: 10.27.16.89
     - name: "iot.{{domain}}"
       type: physical
       subnet: 10.27.40.0/24
-      gateway: 10.27.0.1
-      dns: 10.27.0.89
+      gateway: 10.27.40.1
+      dns: 10.27.40.89
     - name: "cctv.{{domain}}"
       type: physical
       subnet: 10.27.80.0/24
-      gateway: 10.27.0.1
-      dns: 10.27.0.89
+      gateway: 10.27.80.1
+      dns: 10.27.80.89
 
 
 ansible_ssh_user: valentine

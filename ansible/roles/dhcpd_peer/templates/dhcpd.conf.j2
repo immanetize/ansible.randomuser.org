@@ -4,21 +4,17 @@ option classless-routes-win code 249 = array of unsigned integer 8;
 
 {% for region in networks_by_region %}
 shared-network {{ region }} {
-  {% if region == "HOME" %}
-  if vendor-class-identifier ~= "android.*" {
-    option routers 10.27.16.1;
-  } else {
-  option classless-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
-  option static-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
-  option classless-routes-win 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
-  }
-  {% endif %}
+#  {% if region == "HOME" %}
+#  option classless-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
+#  option static-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
+#  option classless-routes-win 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
+#  {% endif %}
 	max-lease-time 6000;
 	default-lease-time 3600;
   {% for network in networks_by_region[region] %}
   subnet {{ network['subnet']| ipaddr('network') }} netmask {{ network['subnet'] | ipaddr('netmask') }} {
 		authoritative;
-    option domain-name-servers 10.27.0.89; 
+    option domain-name-servers {{ network['dns'] | default('8.8.8.8') }}; 
     {% if network['gateway'] is defined %}
 		option routers {{ network['gateway'] }};
     {% endif %}
