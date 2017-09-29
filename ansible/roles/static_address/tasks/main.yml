@@ -1,0 +1,24 @@
+#- name: do the interfaces
+#  nmcli:
+#    autoconnect: yes
+#    conn_name: "{{ item['name'] }}"
+#    dns4: "{{ item['dns'] | default('8.8.8.8') }}"
+#    #gw4: "{{ item.gateway | default('10.27.0.1' ) }}"
+#    ip4: "{{ item['subnet'] | ipaddr(last_octet) }}"
+#    master: internal
+#    ifname: ""
+#    state: present
+#    type: ethernet 
+#  with_items: "{{ networks_by_region[region] }}"
+
+- name: add addresses
+  nmcli:
+    autoconnect: yes
+    conn_name: internal
+    dns4: "{{ item['dns'] | default('8.8.8.8') }}"
+    gw4: "{{ item.gateway | default('10.27.0.1' ) }}"
+    ip4: "{{ item['subnet'] | ipaddr(last_octet) }}"
+    ifname: ""
+    state: present
+    type: ethernet 
+  with_items: "{{ networks_by_region[region] }}"

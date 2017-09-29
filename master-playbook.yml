@@ -10,6 +10,17 @@
   roles:
     - rax_cloud_build
 
+- name: set up interfaces
+  hosts:
+    - gateway
+  vars:
+    domain: "{{ lookup('pipe', 'hostname -d') }}"
+  become: true
+  tags:
+    - static_address
+  roles:
+    - static_address
+
 - name: deploy dhcpd container
   hosts:
     - gateway
@@ -17,6 +28,6 @@
     - dhcpd
   become: True
   vars:
-    domain: randomuser.org
+    domain: "{{ lookup('pipe', 'hostname -d') }}"
   roles:
     - dhcpd_peer

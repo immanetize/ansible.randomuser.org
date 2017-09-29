@@ -3,3 +3,5 @@ ansible_ssh_user: valentine
 ansible_ssh_private_key_file: ~/.ssh/cloud_id
 become_user: valentine
 become: True
+region: HOME
+last_octet: 1
