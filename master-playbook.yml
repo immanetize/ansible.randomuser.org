@@ -1,14 +1,14 @@
-#- name: build rax cloud hosts
-#  hosts: rax_cloud_hosts
-#  vars:
-#    domain: "{{ lookup('pipe', 'hostname -d') }}"
-#  #  vars_files: 
-#  #  - ~/ansible.randomuser.org/ansible/defaults/main.yml
-#  tags:
-#    - build
-#    - cloud_build
-#  roles:
-#    - rax_cloud_build
+- name: build rax cloud hosts
+  hosts: rax_cloud_hosts
+  vars:
+    domain: "{{ lookup('pipe', 'hostname -d') }}"
+  #  vars_files: 
+  #  - ~/ansible.randomuser.org/ansible/defaults/main.yml
+  tags:
+    - build
+    - cloud_build
+  roles:
+    - rax_cloud_build
 
 - name: deploy dhcpd container
   hosts:
