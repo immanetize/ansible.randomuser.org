@@ -1,0 +1,10 @@
+default vesamenu.c32
+prompt 1
+timeout 600
+
+label linux
+menu label ^Install {{ distribution.name }}
+menu default
+kernel {{ distribution.name }}{{ distribution.release }}/vmlinuz
+append initrd={{ distribution.name }}{{ distribution.release }}/initrd.img inst.stage2={{ distribution.baseurl }}
+

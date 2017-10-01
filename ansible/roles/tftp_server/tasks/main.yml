@@ -1,0 +1,43 @@
+- include_role: 
+    name: non_atomic_docker_host
+- include_role: 
+    name: default
+
+- name: create container scratch directory
+  file:
+    dest: /var/lib/docker/scratch/tftpd
+    state: directory
+- name: ship the dockerfile
+  template:
+    src: Dockerfile
+    dest: /var/lib/docker/scratch/tftpd/
+- name: create tftp payload dir
+  file:
+    dest: /var/lib/tftpboot
+    state: directory
+- name: ship the tftp menu
+  template:
+    src: default.j2
+    dest: /var/lib/tftpboot/default
+
+- name: build the container image
+  docker_image:
+    state: present
+    force: yes
+    rm: yes
+    name: tftpd
+    path: /var/lib/docker/scratch/tftpd/
+
+- name: run the container
+  docker_container:
+    name: tftpd
+    image: tftpd:latest
+    memory: 128m
+    log_driver: journald
+    published_ports:
+      - 10.27.0.1:69:69
+    network_mode: host
+    volumes:
+      - /var/lib/tftpboot:/var/lib/tftpboot:z
+    state: started
+    recreate: yes
