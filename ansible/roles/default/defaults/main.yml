@@ -1,0 +1,8 @@
+distribution:
+  name: fedora
+  release: 26
+  edition: atomic
+  arch: x86_64
+  baseurl: "https://dl.fedoraproject.org/pub/fedora/linux/releases/{{ distribution.release }}/Everything/{{ distribution.arch }}/os/"
+  initrd_url_append: isolinux/initrd.img
+  kernel_url_append: isolinux/vmlinuz
