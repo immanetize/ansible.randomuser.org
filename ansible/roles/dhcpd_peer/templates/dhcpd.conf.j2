@@ -1,14 +1,22 @@
-option classless-routes code 121 = array of unsigned integer 8;
-option static-routes code 33 = array of unsigned integer 8;
-option classless-routes-win code 249 = array of unsigned integer 8;
+# testing A # 
+# option classless-routes code 121 = array of unsigned integer 8;
+##
+# untested B # option static-routes code 33 = array of unsigned integer 8;
+# untested C # option classless-routes-win code 249 = array of unsigned integer 8;
 
 {% for region in networks_by_region %}
 shared-network {{ region }} {
+# these options should be tested and documented for various clients
 #  {% if region == "HOME" %}
-#  option classless-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
-#  option static-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
-#  option classless-routes-win 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
+# testing A #
+# option classless-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
+# #
+# untested B # 
+# option static-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
+# #
+# untested C # option classless-routes-win 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
 #  {% endif %}
+#  also test placement - needs limited scope, especially for testing! 
 	max-lease-time 6000;
 	default-lease-time 3600;
   {% for network in networks_by_region[region] %}
