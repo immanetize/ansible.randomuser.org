@@ -1,22 +1,33 @@
- - include_role:
+- include_role:
     name: non_atomic_docker_host
-- debug:
-    msg: "{{ item['subnet'] | ipaddr('address') }}"
-  with_items: "{{ networks_by_region['HOME'] }}"
-
 - name: create container scratch directory
   file:
     dest: /var/lib/docker/scratch/ipsilon/
     state: directory
 - name: send the dockerfile
-	template:
-		src: Dockerfile
-		dest: /var/lib/docker/scratch/ipsilon/
+  template:
+    src: Dockerfile
+    dest: /var/lib/docker/scratch/ipsilon/
 - name: build the container image
-	docker_image:
-		state: present
-		force: yes
-		rm: yes
-		name: ipsilon
-		path: /var/lib/docker/scratch/ipsilon/		
+  docker_image:
+    state: present
+    force: yes
+    rm: yes
+    name: ipsilon
+    path: /var/lib/docker/scratch/ipsilon/		
+- name: run the container
+  docker_container:
+    capabilities: []
+    devices: []
+      # - <path_on_host>:<path_in_container>:<cgroup_permissions>
+    image: ipsilon
+    name: ipsilon
+    kernel_memory: 512M
+    log_driver: journald
+    network_mode: host
+    published_ports:
+      - 443/tcp
+    state: started
+    volumes:
+      - /var/lib/sss:/var/lib/sss:ro
  
