@@ -20,3 +20,24 @@
     domain: randomuser.org
   roles:
     - dhcpd_peer
+- name: deploy pihole container
+  hosts:
+    - gateway
+  tags:
+    - pihole
+  become: True
+  vars:
+    domain: randomuser.org
+  roles:
+    - pihole_container
+
+- name: deploy ipsilon container
+  hosts:
+    - gateway
+  tags:
+    - ipsilon
+  become: True
+  vars:
+    domain: randomuser.org
+  roles:
+    - ipsilon_container
