@@ -1,0 +1,16 @@
+- include_role: 
+    name: non_atomic_docker_host
+
+- name: run the container
+  docker_container:
+    name: pihole
+    image: "{{ domain }}/pihole:latest"
+    memory: 128m
+    log_driver: journald
+    published_ports:
+      - 10.27.0.1:53:53/udp
+      - 10.27.0.1:80:80
+    network_mode: host
+    state: started
+    recreate: yes
+    command: /usr/lib/systemd/systemd

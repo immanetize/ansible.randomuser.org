@@ -1,0 +1,49 @@
+option classless-routes code 121 = array of unsigned integer 8;
+option static-routes code 33 = array of unsigned integer 8;
+option classless-routes-win code 249 = array of unsigned integer 8;
+
+{% for region in networks_by_region %}
+shared-network {{ region }} {
+#  {% if region == "HOME" %}
+#  option classless-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
+#  option static-routes 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
+#  option classless-routes-win 24, 10,27,0, 0,0,0,0, 0,10,27,0,1, 24, 10,27,143, 10,27,0,5;
+#  {% endif %}
+	max-lease-time 6000;
+	default-lease-time 3600;
+  {% for network in networks_by_region[region] %}
+  subnet {{ network['subnet']| ipaddr('network') }} netmask {{ network['subnet'] | ipaddr('netmask') }} {
+		authoritative;
+    option domain-name-servers {{ network['dns'] | default('8.8.8.8') }}; 
+    {% if network['gateway'] is defined %}
+		option routers {{ network['gateway'] }};
+    {% endif %}
+		option domain-name "randomuser.org";
+    pool {
+      {% set end_addr = network['subnet'] | ipaddr('-2') %}
+      {% set start_addr = network['subnet'] | ipaddr('-200') %}
+      range {{ network['subnet'] | ipaddr('network') }} {{ end_addr[:-3] }};
+      {% if 'guest' in network.name %}
+      allow unknown-clients;
+      deny known-clients;
+      {% else %}
+      deny unknown-clients;
+      allow known-clients;
+      {% endif %}
+    }
+  }
+  {% endfor %}
+}
+{% endfor %}
+{% for group in groups %}
+class "{{ group }}" {
+  match hardware;
+  }
+{% endfor %}
+{% for host in groups['all'] %}
+  {% if hostvars[host]['mac_address'] is defined %}
+  host {{ host }}.{{ domain }} {
+    hardware ethernet {{ hostvars[host]['mac_address']| default('') }}
+  };
+  {% endif %}
+{% endfor %}  
