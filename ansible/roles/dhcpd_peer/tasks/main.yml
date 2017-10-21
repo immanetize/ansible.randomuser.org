@@ -38,5 +38,6 @@
     volumes: 
       - /var/lib/dhcpd:/var/lib/dhcpd:Z
       - /var/lib/docker/scratch/dhcpd/dhcpd.conf:/etc/dhcp/dhcpd.conf:Z
+      - /var/log/journal:/var/log/journal
     state: started
     recreate: yes
