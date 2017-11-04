@@ -1,0 +1,2 @@
+net:
+- {hwaddr: 'E4:B3:18:C2:20:6D', type: dhcp, zone: home}

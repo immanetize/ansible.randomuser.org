@@ -1,0 +1,6 @@
+net:
+- extended_dhcp_options: []
+  hwaddr: 80:2A:A8:80:3A:86
+  last_octet: '200'
+  segment: home
+  type: dhcp

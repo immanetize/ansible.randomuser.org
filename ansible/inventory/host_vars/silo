@@ -3,7 +3,5 @@ ansible_ssh_user: valentine
 become: true
 become_user: valentine
 net:
-- hwaddr: ['00:30:18:a5:a3:1a']
-  type: upstream_dhcp
-  zone: public
-- {name: internal, type: bridge}
+- hwaddr: ['00:25:90:a4:24:1b', '00:25:90:a4:24:1a']
+  type: bond
