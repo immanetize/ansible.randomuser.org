@@ -21,15 +21,10 @@ shared-network {{ region }} {
 		option domain-name "randomuser.org";
     pool {
       {% set end_addr = network['subnet'] | ipaddr('-2') %}
-      {% set start_addr = network['subnet'] | ipaddr('-200') %}
+      {% set start_addr = network['subnet'] | ipaddr('-100') %}
       range {{ network['subnet'] | ipaddr('network') }} {{ end_addr[:-3] }};
-      {% if 'guest' in network.name %}
-      allow unknown-clients;
-      deny known-clients;
-      {% else %}
-      deny unknown-clients;
-      allow known-clients;
-      {% endif %}
+        allow unknown-clients;
+        deny known-clients;
     }
   }
   {% endfor %}
