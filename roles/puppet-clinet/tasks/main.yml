@@ -1,0 +1,8 @@
+- package:
+  name: puppet
+  state: present
+- copy:
+  dest: /etc/sysconfig/puppetagent
+  contents: PUPPET_EXTRA_OPTS="--server foreman.randomuser.org"
+
+
