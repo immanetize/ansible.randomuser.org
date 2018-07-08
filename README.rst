@@ -1,6 +1,8 @@
 ----------------------
 ansible.randomuser.org
 ----------------------
+`refactor`: converting to role-only
+
 ansible playbooks for my personal infrastructure
 
 Iterations of this have been floating around my systems since I first learned about ansible.
