@@ -1,0 +1,6 @@
+- name: test iteration
+  shell: "echo '{% for i in [1,2,3] %} {{ i }} {% endfor %}'"
+- name: run the install command
+  become: True
+  shell: "logger -p info ' {% for option in foreman['install']['options'] %} {{ option }} {% endfor %}'"
+  
