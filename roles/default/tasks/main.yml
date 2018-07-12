@@ -1,0 +1,6 @@
+- name: install convenient packages
+  package:
+    name: "{{item}}"
+    state: latest
+  with_items:
+    - vim-enhanced
