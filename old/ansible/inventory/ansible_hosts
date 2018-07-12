@@ -1,11 +1,8 @@
-[rax_cloud_hosts]
-atomic
-[atomic_hosts]
-atomic
-[IAD]
-atomic
-
 [core_virtual_machines]
 [home_infrastructure]
 gateway
 controller
+
+[kube]
+public0.randomuser.org
+public1.randomuser.org
