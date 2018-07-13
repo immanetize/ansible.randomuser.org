@@ -9,5 +9,13 @@
     reload: yes
     state: present
     setype: ssh_port_t
-  when: False      
+  when: ansible_selinux.status != "disabled"
+- name: ship sshd_config
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    mode: 0600
+    validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+
 
