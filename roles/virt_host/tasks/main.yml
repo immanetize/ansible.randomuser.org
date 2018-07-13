@@ -4,3 +4,10 @@
     state: latest
   with_items:
     - "@^virtualization-host-environment"
+- name: start libvirtd
+  service:
+    name: libvirtd
+    state: started
+    enabled: True
+     
+
