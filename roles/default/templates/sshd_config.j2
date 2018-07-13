@@ -1,0 +1,66 @@
+{% if not validation.ssh_port %}
+Port 22
+{% endif %}
+
+Port 1027
+
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+RekeyLimit default none
+
+SyslogFacility AUTHPRIV
+{% if debug.sshd %}
+LogLevel Debug
+{% else %}
+LogLevel Info
+{% endif %}
+
+LoginGraceTime 60s
+PermitRootLogin without-password
+
+AuthorizedKeysFile	.ssh/authorized_keys
+
+{% if validation.ssh_keys %}
+PasswordAuthentication no
+{% else %}
+PasswordAuthentication yes
+{% endif %}
+
+
+PubkeyAuthentication yes
+ChallengeResponseAuthentication no
+KerberosAuthentication no
+GSSAPIAuthentication no
+GSSAPICleanupCredentials no
+
+UsePAM yes
+
+AllowAgentForwarding yes
+
+
+# modify if tunnelling
+AllowTcpForwarding no
+GatewayPorts no
+PermitTunnel no
+
+X11Forwarding no
+{% if debug.sshd %}
+UseDNS no
+{% else %}
+UseDNS yes
+{% endif %}
+
+# Accept locale-related environment variables
+AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+AcceptEnv XMODIFIERS
+
+# override default of no subsystems
+Subsystem	sftp internal-sftp
+
+UsePAM yes
+AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys
+AuthorizedKeysCommandUser nobody

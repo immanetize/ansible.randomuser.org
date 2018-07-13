@@ -18,3 +18,7 @@
   service:
     name: systemd-journald
     state: restarted
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted

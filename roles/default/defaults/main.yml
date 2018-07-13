@@ -1,0 +1,6 @@
+---
+validation:
+  ssh_port: False
+  ssh_keys: False
+debug:
+  sshd: False

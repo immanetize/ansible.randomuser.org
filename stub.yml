@@ -1,0 +1,6 @@
+- name: stub
+  hosts: kube
+  become: True
+  roles:
+    - default
+    - virt_host
