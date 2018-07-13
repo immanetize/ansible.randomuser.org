@@ -1,4 +1,7 @@
-- include: ssh_port.yml
+- include: setenforce1.yml
+  when: 
+    ( ansible_selinux.status == "disabled" )
+- include: ssh_port_test.yml
 - name: install convenient packages
   package:
     name: "{{item}}"
@@ -10,3 +13,12 @@
     - nmap
     - rsync
     - tcpdump
+- name: ensure permissive
+  lineinfile:
+    regexp: '^(SELINUX=).*'
+    backrefs: yes
+    line: '\1permissive'
+    path: /etc/sysconfig/selinux
+  notify: trigger autorelabel
+    
+

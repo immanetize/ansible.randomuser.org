@@ -3,7 +3,7 @@
   notify: wait_reboot
 
 - name: wait_reboot
-  shell: sleep 1 && shutdown -r now && sleep 1
+  shell: sleep 2 && systemctl isolate reboot.target && sleep 2
   notify: do_the_wait
 
 - name: do_the_wait
