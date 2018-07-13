@@ -31,4 +31,6 @@
   changed_when: false
   skip_errors: true
 - name: test another connection now
+  failed_when: false
+  changed_when: false
   shell: whoami
