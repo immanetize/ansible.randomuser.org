@@ -4,3 +4,7 @@
     state: latest
   with_items:
     - vim-enhanced
+    - lsof
+    - strace
+    - nmap
+    - rsync
