@@ -2,5 +2,7 @@
 validation:
   ssh_port: False
   ssh_keys: False
+  basic_firewall: False
+
 debug:
   sshd: False
