@@ -1,3 +1,4 @@
+- include: ssh_port.yml
 - name: install convenient packages
   package:
     name: "{{item}}"
@@ -8,3 +9,4 @@
     - strace
     - nmap
     - rsync
+    - tcpdump

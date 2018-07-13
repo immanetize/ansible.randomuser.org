@@ -1,0 +1,34 @@
+- name: measure a connection to default ssh port
+  wait_for:
+    active_connection_states: SYN_RECV
+    connect_timeout: 1
+    timeout: 2
+    delay: 0
+    host: "{{ ansible_hostname }}"
+    port: 22
+    state: present
+  register: p22state
+  failed_when: false
+- name: measure a connection to default ssh port
+  wait_for:
+    active_connection_states: SYN_RECV
+    connect_timeout: 1
+    timeout: 2
+    delay: 0
+    host: "{{ ansible_hostname }}"
+    port: 1027
+    state: present
+  register: p1027_state
+  failed_when: false
+- include: change_ssh_port.yml
+  when: 
+    ( 'Timeout' in p1027_state.msg ) and
+    ( p22state.state == "present" )
+- name: tell ansible to use port 1027 for ssh now
+  set_fact:
+    ansible_ssh_port: 1027
+  failed_when: false
+  changed_when: false
+  skip_errors: true
+- name: test another connection now
+  shell: whoami
