@@ -1,6 +1,11 @@
 - name: stub
   hosts: kube
+  gather_facts: False
   become: True
   roles:
     - default
+- name: stub
+  hosts: kube
+  become: True
+  roles:
     - virt_host

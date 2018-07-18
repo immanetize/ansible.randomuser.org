@@ -1,7 +1,9 @@
+- include: ssh_port_test.yml
+- setup:
 - include: setenforce1.yml
   when: 
     ( ansible_selinux.status == "disabled" )
-- include: ssh_port_test.yml
+- debug: var=ansible_selinux.status 
 - name: install convenient packages
   package:
     name: "{{item}}"
@@ -19,6 +21,10 @@
     backrefs: yes
     line: '\1permissive'
     path: /etc/sysconfig/selinux
-  notify: trigger autorelabel
+  notify: 
+    - trigger autorelabel
+    - reboot
+- include: change_ssh_port.yml
+  when: ansible_ssh_port == 22
     
 
