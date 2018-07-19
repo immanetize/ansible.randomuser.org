@@ -6,3 +6,8 @@ controller
 [kube]
 public0.randomuser.org
 public1.randomuser.org
+
+[workstations]
+workstation0.randomuser.org
+workstation.randomuser.org
+yoga.randomuser.org
