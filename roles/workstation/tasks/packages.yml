@@ -1,0 +1,9 @@
+- name: install some packages
+  dnf:
+    name: "{{ item }}"
+    state: latest
+  with_itens:
+    - meld
+    - git
+    - vcsh
+    - ansible
