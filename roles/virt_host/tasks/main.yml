@@ -6,14 +6,19 @@
     - "@^virtualization-host-environment"
     - libvirt-python
     - python-lxml
+- name: gimme perms
+  template: 
+    src: virt_perms.rules.j2
+    dest: /etc/polkit-1/rules.d/00-libvirt_access.rules
+  with_items:
+    - virt-admins@randomuser.org
+    - foreman-admins@randomuser.org
+    - valentine
 - name: start libvirtd
   service:
     name: libvirtd
     state: started
     enabled: True
-- shell: virsh net-list --all
-  register: net_list
-- debug: var=net_list
 - name: create a network
   virt_net:
     name: "{{ item.name }}"
@@ -25,13 +30,21 @@
     name: "{{ item.name }}"
     state: active
   with_items: "{{ interfaces }}"
-- shell: virsh net-list --all
-  register: net_list
-- debug: var=net_list
 - name: autostart the network
   virt_net:
     name: "{{ item.name }}"
     autostart: yes
   with_items: "{{ interfaces }}"
-     
-
+- name: do a stupid reminder
+  debug: 
+    msg:  |
+      This should be a module that sets up the valentine account
+      on silo with ssh keys to log into th remote hosts
+      with_items: "{{ interfaces }}"
+- name: seed image
+  delegate_to: silo.randomuser.org
+  synchronize:
+    src: /srv/iso/rhel/7/images/rhel7-latest.qcow2
+    dest: /var/lib/libvirt/images/
+    copy_links: yes
+- include: foreman_proxy_shim.yml

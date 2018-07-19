@@ -2,6 +2,7 @@
 [home_infrastructure]
 gateway
 controller
+silo.randomuser.org
 
 [kube]
 public0.randomuser.org
