@@ -6,6 +6,8 @@
     - default
 - name: stub
   hosts: kube
+  tags: 
+    - virt
   become: True
   roles:
     - virt_host

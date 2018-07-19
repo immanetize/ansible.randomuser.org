@@ -4,10 +4,34 @@
     state: latest
   with_items:
     - "@^virtualization-host-environment"
+    - libvirt-python
+    - python-lxml
 - name: start libvirtd
   service:
     name: libvirtd
     state: started
     enabled: True
+- shell: virsh net-list --all
+  register: net_list
+- debug: var=net_list
+- name: create a network
+  virt_net:
+    name: "{{ item.name }}"
+    command: define
+    xml: "{{ lookup('template', 'virt_net.xml.j2') }}"
+  with_items: "{{ interfaces }}"
+- name: start the network
+  virt_net:
+    name: "{{ item.name }}"
+    state: active
+  with_items: "{{ interfaces }}"
+- shell: virsh net-list --all
+  register: net_list
+- debug: var=net_list
+- name: autostart the network
+  virt_net:
+    name: "{{ item.name }}"
+    autostart: yes
+  with_items: "{{ interfaces }}"
      
 

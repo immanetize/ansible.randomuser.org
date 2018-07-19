@@ -1,1 +1,8 @@
 ansible_ssh_port: 1027        
+interfaces:
+  - name: internal0
+    address: 10.27.32.1
+    netmask: 255.255.240.0
+    dhcp:
+      start: 10.27.32.100
+      end: 10.27.47.254
