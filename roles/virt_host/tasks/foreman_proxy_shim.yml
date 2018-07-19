@@ -1,0 +1,8 @@
+- set_fact:
+    seed_image: "/var/lib/libvirt/images/{{ ansible_hostname }}-proxy.randomuser.org.qcow2"
+- name: copy the seed image for use
+  copy:
+    remote_src: yes
+    src: /var/lib/libvirt/images/rhel7-latest.qcow2
+    dest: "{{ seed_image }}"
+
