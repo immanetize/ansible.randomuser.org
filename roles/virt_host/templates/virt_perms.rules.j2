@@ -1,0 +1,21 @@
+// Allow any user in the 'virt-admins@randomuser.org' group to connect to system libvirtd
+// without entering a password.
+
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.libvirt.unix.manage" &&
+        subject.isInGroup("virt-admins@randomuser.org")) {
+        return polkit.Result.YES;
+    }
+});
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.libvirt.unix.manage" &&
+        subject.isInGroup("foreman-admins@randomuser.org")) {
+        return polkit.Result.YES;
+    }
+});
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.libvirt.unix.manage" &&
+        subject.isInGroup("valentine")) {
+        return polkit.Result.YES;
+    }
+});
