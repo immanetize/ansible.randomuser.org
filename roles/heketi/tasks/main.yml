@@ -1,0 +1,4 @@
+- name: deploy heketi config
+  template:
+    src: heketi.json.j2
+    dest: /etc/heketi/heketi.json
