@@ -1,16 +1,27 @@
 ansible_ssh_port: 1027        
 interfaces:
   - name: internal0
+    type: virt
+    zone: internal
     address: 10.27.16.1
     netmask: 255.255.240.0
     dhcp:
       start: 10.27.16.100
       end: 10.27.31.254
   - name: local0
+    type: virt
+    zone: work
     address: 192.168.27.1
     netmask: 255.255.255.0
     dhcp:
       start: 192.168.27.100
       end: 192.168.27.254
+  - name: eno1
+    type: ethernet
+    zone: public
+  - name: eno2
+    type: ethernet
+    zone: external
+
 
 

@@ -4,8 +4,12 @@
     state: present
 - name: install server software
   yum: 
-    name: glusterfs-server
+    name: "{{ item }}"
     state: present
+  with_items:
+    - glusterfs-server
+    - heketi
+- include_role: heketi
 - name: create a brick
   lvol:
     lv: "{{ pool.name }}"
