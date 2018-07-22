@@ -27,5 +27,13 @@
     - reboot
 - include: change_ssh_port.yml
   when: ansible_ssh_port == 22
-    
+- name: apply interface zoning
+  firewalld:
+    immediate: yes
+    interface: "{{ item.name }}"
+    permanent: yes
+    zone: "{{ item.zone }}"
+    state: enabled
+  with_items: "{{ interfaces }}"
+  when: item.zone is defined
 
