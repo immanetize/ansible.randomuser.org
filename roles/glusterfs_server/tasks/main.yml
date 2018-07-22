@@ -1,0 +1,26 @@
+- name: get some gluster packages
+  yum:
+    name: centos-release-gluster41
+    state: present
+- name: install server software
+  yum: 
+    name: glusterfs-server
+    state: present
+- name: create a brick
+  lvol:
+    lv: "{{ pool.name }}"
+    size: "{{ pool.size }}"
+    vg: "{{ pool.vgs }}"
+    opts: "--type raid5"
+- name: create a filesystem on the brick
+  filesystem:
+    dev: "/dev/{{ pool.vgs }}/{{ pool.name }}"
+    fstype: "{{ pool.fstype }}"
+    opts: "-i size=512 -L {{ pool.name }}"
+- name: mount the brick
+  mount:
+    fstype: "{{ pool.fstype }}"
+    src: "/dev/{{ pool.vgs }}/{{ pool.name }}"
+    path: "/var/bricks/{{ pool.name }}"
+    state: mounted
+- debug: var=ansible_play_batch

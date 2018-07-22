@@ -1,3 +1,7 @@
+- include_role: 
+    name: glusterfs_server
+- fail:
+  failed_when: True
 - name: install virt packages
   package:
     name: "{{item}}"

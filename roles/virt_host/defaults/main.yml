@@ -1,4 +1,9 @@
 vm_size:
   memory: 4096
   cpus: 4
+pool:
+  vgs: "{{ ansible_hostname }}"
+  fstype: xfs
+  size: 50G
+  name: virt_brick
 
