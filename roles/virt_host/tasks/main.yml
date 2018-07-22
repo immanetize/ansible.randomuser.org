@@ -6,6 +6,7 @@
     - "@^virtualization-host-environment"
     - libvirt-python
     - python-lxml
+    - libguestfs-tools
 - name: gimme perms
   template: 
     src: virt_perms.rules.j2
