@@ -2,6 +2,8 @@
   hosts: kube
   gather_facts: False
   become: True
+  tags:
+    - default
   roles:
     - default
 - name: stub

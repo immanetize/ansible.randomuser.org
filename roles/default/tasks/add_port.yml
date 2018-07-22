@@ -1,0 +1,10 @@
+- name: add port with firewalld
+  firewalld:
+    port: "{{ port }}"
+    zone: "{{ zone | default('public') }}"
+    state: enabled
+    permanent: true
+    immediate: yes
+  when: preferred_firewall == "firewalld"
+- include: iptables.yml
+  when: preferred_firewall == "iptables"

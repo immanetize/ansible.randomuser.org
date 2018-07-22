@@ -1,5 +1,6 @@
 - include: ssh_port_test.yml
 - setup:
+- include: firewall.yml
 - include: setenforce1.yml
   when: 
     ( ansible_selinux.status == "disabled" )

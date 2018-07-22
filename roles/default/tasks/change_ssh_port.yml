@@ -13,6 +13,7 @@
     state: present
     setype: ssh_port_t
   when: ansible_selinux.status != "disabled"
+- include: add_port.yml port="1027"
 - name: ship sshd_config
   template:
     src: sshd_config.j2

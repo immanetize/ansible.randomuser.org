@@ -1,0 +1,7 @@
+- name: set a var maybe
+  set_fact:
+    preferred_firewall: "{{ preferred_firewall | default('firewalld') }}"
+- include: firewalld.yml
+  when: preferred_firewall == "firewalld"
+- include: iptables.yml
+  when: preferred_firewall == "iptables"

@@ -1,0 +1,12 @@
+- name: get packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - firewalld
+    - python-firewall
+- name: start it
+  service: 
+    name: firewalld
+    state: started
+
