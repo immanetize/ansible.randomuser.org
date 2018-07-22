@@ -31,11 +31,11 @@
     name: "{{ item.name }}"
     state: active
   with_items: "{{ interfaces }}"
-- name: autostart the network
-  virt_net:
-    name: "{{ item.name }}"
-    autostart: yes
-  with_items: "{{ interfaces }}"
+  #- name: autostart the network
+  #  virt_net:
+  #    name: "{{ item.name }}"
+  #    autostart: yes
+  #  with_items: "{{ interfaces }}"
 - name: do a stupid reminder
   debug: 
     msg:  |
@@ -48,4 +48,9 @@
     src: /srv/iso/rhel/7/images/rhel7-latest.qcow2
     dest: /var/lib/libvirt/images/
     copy_links: yes
+- name: get vm list
+  virt:
+    command: list_vms
+  register: vm_list
 - include: foreman_proxy_shim.yml
+

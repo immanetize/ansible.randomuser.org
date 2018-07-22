@@ -1,8 +1,47 @@
 - set_fact:
-    seed_image: "/var/lib/libvirt/images/{{ ansible_hostname }}-proxy.randomuser.org.qcow2"
-- name: copy the seed image for use
-  copy:
-    remote_src: yes
-    src: /var/lib/libvirt/images/rhel7-latest.qcow2
-    dest: "{{ seed_image }}"
+    provision_hostname: "{{ ansible_hostname }}-proxy.randomuser.org"
+- name: get vm info
+  virt:
+    command: list_vms
+  register: vm_list
+- debug: var=vm_list
+- set_fact:
+    seed_image: "/var/lib/libvirt/images/{{ provision_hostname }}.qcow2"
+- include: provision_image.yml
+  when: provision_hostname not in vm_list.list_vms
+- name: define the vm
+  virt:
+    name: "{{ provision_hostname }}"
+    command: define
+    xml: "{{ lookup('template', 'basic_virt.xml.j2') }}"
+#- name: start the vm
+# virt:
+#   name: "{{ provision_hostname }}"
+#    state: running
+#   autostart: yes
+- name: get vm info
+  shell: 
+    virsh domiflist {{ provision_hostname }} | grep network
+  register: proxy_info
+- debug: var=proxy_info
+- set_fact:
+    proxy_mac:
+      placeholder: True
+- set_fact:
+    proxy_mac: "{{ proxy_mac | combine({ item.split()[-3]: item.split()[-1] }) }}"
+  with_items: "{{ proxy_info.stdout_lines }}"
+- name: get a lease
+  shell: |
+    virsh net-update '{{ item.name }}' \
+    add-first ip-dhcp-host \
+    "<host mac='{{ proxy_mac[item.name] }}' \
+     name='{{ provision_hostname }}' \
+     ip='{{ item.address + '15'}}' />" --live --config
+  with_items: "{{ interfaces }}"
+- name: verify leases
+  shell: "virsh net-dumpxml {{ item.name }}"
+  with_items: "{{ interfaces }}"
+  register: net_xml
+- debug: var=net_xml
+
 
