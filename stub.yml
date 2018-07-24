@@ -1,4 +1,4 @@
-- name: stub
+- name: default stub
   hosts: kube
   gather_facts: False
   become: True
@@ -6,10 +6,17 @@
     - default
   roles:
     - default
-- name: stub
+- name: virt stub
   hosts: kube
   tags: 
     - virt
   become: True
   roles:
     - virt_host
+- name: fact stub
+  hosts: kube
+  tags:
+    - store_key
+  tasks:
+    - include: tasks/store_key.yml
+    - debug: var=ansible_local.vars_file.taxonomy.bullshit
