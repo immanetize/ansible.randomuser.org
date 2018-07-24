@@ -1,0 +1,25 @@
+- name: ensure category is in file
+  become: true
+  lineinfile:
+    line: "[{{category}}]"
+    path: "/etc/ansible/facts.d/{{file}}.fact"
+    state: present
+    create: yes
+    mode: 0600
+- setup:
+  become: true
+- name: get or set key
+  set_fact: { placeholder: "{{ ansible_local[file][category][key] | default(lookup('password', '/dev/shm/%s_%s_%s' % ( file, category, key ) ) ) }}" }
+  failed_when: false
+  ignore_errors: yes
+- name: ensure key is defined
+  become: true
+  lineinfile:
+    regexp: "^{{ key }} =.*$"
+    line: "{{ key }} = {{ placeholder }}"
+    path: "/etc/ansible/facts.d/{{file}}.fact"
+    insertafter: "[{{ category }}]"
+  register: key_def
+- setup:
+  become: true
+  when: key_def.changed == true
