@@ -16,6 +16,11 @@
     - nmap
     - rsync
     - tcpdump
+- name: create facts dir
+  file:
+    path: /etc/ansible/facts.d
+    mode: 0700
+    state: directory
 - name: ensure permissive
   lineinfile:
     regexp: '^(SELINUX=).*'
