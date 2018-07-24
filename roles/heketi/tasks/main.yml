@@ -14,6 +14,15 @@
       -f {{ heketi_keypath }}
   args:
     creates: "{{  heketi_keypath }}"
+- name: change ownership
+  file:
+    path: "{{ item }}"
+    mode: 0640
+    owner: root
+    group: heketi
+  with_items:
+    - "{{ heketi_keypath }}"
+    - "{{ heketi_keypath }}.pub"
 - name: capture heketi pubkey
   shell: "cat {{ heketi_keypath}}.pub"
   changed_when: false
@@ -41,4 +50,10 @@
     #  authrorized_key:
     #    user: "{{ heketi_executor }}"
     #    key: "{{ heketi_pubkey.stdout }}"
-
+- name: ship a functional service unit
+  copy:
+    src: heketi.service
+    dest: /etc/systemd/system/heketi.service
+  register: unitfile
+- shell: systemctl daemon-reload
+  when: unitfile|changed
