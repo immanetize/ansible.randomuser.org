@@ -13,4 +13,4 @@ interfaces:
     zone: external
   - name: enp2s0
     type: ethernet
-    zone: external
+    zone: public
