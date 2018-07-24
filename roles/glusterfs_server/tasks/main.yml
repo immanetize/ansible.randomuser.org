@@ -9,7 +9,7 @@
   with_items:
     - glusterfs-server
     - heketi
-- include_role: heketi
+- include_role: name=heketi
 - name: create a brick
   lvol:
     lv: "{{ pool.name }}"

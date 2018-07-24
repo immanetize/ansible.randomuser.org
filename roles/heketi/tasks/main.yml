@@ -1,4 +1,44 @@
+- include: tasks/store_key.yml file=heketi category=credentials key=admin_pass
+- include: tasks/store_key.yml file=heketi category=credentials key=user_pass
+- name: create directory for heketi ssh keys
+  file:
+    path: "{{ heketi_keydir }}"
+    state: directory
+    mode: 0750
+    owner: root
+    group: heketi
+- name: create heketi keypair
+  shell: |
+    ssh-keygen -N '' -b 521 \
+      -t ecdsa \
+      -f {{ heketi_keypath }}
+  args:
+    creates: "{{  heketi_keypath }}"
+- name: capture heketi pubkey
+  shell: "cat {{ heketi_keypath}}.pub"
+  changed_when: false
+  register: heketi_pubkey
 - name: deploy heketi config
   template:
     src: heketi.json.j2
     dest: /etc/heketi/heketi.json
+- name: create heketi worker
+  delegate_to: "{{ item }}"
+  with_items: "{{ gluster_hosts }}"
+  user:
+    name: "{{ heketi_executor }}"
+    system: yes
+- name: give heketi worker sudo privs
+  delegate_to: "{{ item }}"
+  with_items: "{{ gluster_hosts }}"
+  lineinfile:
+    line: "{{ heketi_executor }} ALL=(ALL) NOPASSWD: ALL"
+    path: /etc/sudoers.d/heketi.conf
+    validate: '/usr/sbin/visudo -c -f %s'
+    create: yes
+    #- name: set up pubkey
+    #  delegate_to: "{{ gluster_hosts }}"
+    #  authrorized_key:
+    #    user: "{{ heketi_executor }}"
+    #    key: "{{ heketi_pubkey.stdout }}"
+
