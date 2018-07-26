@@ -75,6 +75,5 @@
   template:
     src: topology.json.j2
     dest: "/var/lib/heketi/{{ topo_name }}"
-- name: enable firewall for the pool
 
 
