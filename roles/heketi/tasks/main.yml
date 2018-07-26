@@ -1,3 +1,4 @@
+- debug: var=gluster_hosts
 - include: tasks/store_key.yml file=heketi category=credentials key=admin_pass
 - include: tasks/store_key.yml file=heketi category=credentials key=user_pass
 - name: create directory for heketi ssh keys
