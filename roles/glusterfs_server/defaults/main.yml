@@ -1,0 +1,3 @@
+---
+containerized_heketi: false
+storage_zone: 1

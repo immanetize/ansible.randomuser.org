@@ -50,6 +50,17 @@
     #  authrorized_key:
     #    user: "{{ heketi_executor }}"
     #    key: "{{ heketi_pubkey.stdout }}"
+- name: enable shell convenience
+  copy:
+    content: |
+      export HEKETI_CLI_SERVER="http://{{ansible_nodename}}:{{heketi_port}}"
+      export HEKETI_CLI_USER="admin"
+      export HEKETI_CLI_KEY="{{ansible_local.heketi.credentials.admin_pass}}"
+    dest: "{{ ansible_user_dir }}/.heketi_admin"
+- lineinfile:
+    line: "source {{ ansible_user_dir }}/.heketi_admin"
+    path: "{{ ansible_user_dir }}.bash_profile"
+    create: yes
 - name: ship a functional service unit
   copy:
     src: heketi.service
@@ -57,3 +68,13 @@
   register: unitfile
 - shell: systemctl daemon-reload
   when: unitfile|changed
+- service: name=heketi state=started
+- set_fact:
+    topo_name: "gluster_pool_{{ gluster_hosts | to_uuid }}.json"
+- name: build heketi topology
+  template:
+    src: topology.json.j2
+    dest: "/var/lib/heketi/{{ topo_name }}"
+- name: enable firewall for the pool
+
+
