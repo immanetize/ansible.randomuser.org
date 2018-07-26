@@ -10,6 +10,7 @@
     - glusterfs-server
     - heketi
 - include_role: name=heketi
+  when: containerized_heketi == false
 - name: create a brick
   lvol:
     lv: "{{ pool.name }}"
