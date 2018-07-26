@@ -9,6 +9,7 @@
   with_items:
     - glusterfs-server
     - heketi
+    - heketi-client
 - include_role: name=heketi
   when: containerized_heketi == false
 - name: create a brick
