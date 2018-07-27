@@ -27,6 +27,12 @@
   shell: "cat {{ heketi_keypath}}.pub"
   changed_when: false
   register: heketi_pubkey
+- name: send the pubkey
+  delegate_to: "{{ item }}"
+  with_items: "{{ gluster_hosts }}"
+  authorized_key:
+    user: "{{ heketi_executor }}"
+    key: "{{ heketi_pubkey.stdout }}"
 - name: deploy heketi config
   template:
     src: heketi.json.j2
