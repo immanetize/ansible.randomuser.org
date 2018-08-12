@@ -1,7 +1,7 @@
 Host public*.randomuser.org
   IdentityFile {{ssh_key_path}}
   ControlMaster auto
-  ControlPath {{secure_path}}/gateway_socket
+  ControlPath {{secure_path}}/gateway_socket_%h:%p
   ControlPersist yes
   Port 1027
   User root

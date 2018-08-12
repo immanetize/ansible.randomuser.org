@@ -1,31 +1,11 @@
 - name: install required packages
-  dnf: 
+  package: 
     name="{{item}}"
     state=present
   with_items:
     - socat
-
-- name: create impersonator ip
-  iproute2:
-    address=10.27.0.89/16
-    interface=eth2
-    state=present
-- name: adjust httpd listen configuration
-  lineinfile:
-    backrefs=yes
-    state=present
-    regexp='^Listen ([0-9\.]*:)?([0-9]*)( https)?'
-    line="Listen {{ansible_eth2.ipv4.address}}:\2"
-    dest="/etc/httpd/{{item}}"
-  with_items:
-    - conf/httpd.conf
-    - conf.d/ssl.conf
-    - conf.d/nss.conf
-- name: restart apache
-  service:
-    name=httpd
-    state=restarted
 - name: create working directory
+  delegate_to: controller.randomuser.org
   file:
     group=valentine
     owner=valentine
@@ -33,6 +13,8 @@
     state=directory
     mode=0700
 - name: create keypair
+  run_once: True
+  delegate_to: controller.randomuser.org
   become: yes
   become_user: valentine
   shell: "
@@ -43,26 +25,39 @@
       -t ed25519
       -N '' creates={{ssh_key_path}}"
 - name: get pubkey
+  delegate_to: controller.randomuser.org
   shell: cat {{secure_path}}/gateway_ed25519.pub
   register: pubkey
-- name: insert pubkey
-  delegate_to: "{{item}}"
-  with_items:
-    - gateway.randomuser.org
-    - controller.randomuser.org
-  lineinfile:
-    dest="~valentine/.ssh/authorized_keys"
-    create=yes
-    line="{{pubkey.stdout}}"
-    state=present
+  changed_when: false
+- name: push the pubkey
+  become: true
+  authorized_key:
+    user: root
+    key: "{{ pubkey.stdout }}"
 - name: copy ssh client config
+  delegate_to: controller.randomuser.org
   template:
     src=ssh_config
     dest="{{secure_path}}"
-- name: set up controller service and socket
+- name: define service template for tunnel from controller
+  run_once: true
+  delegate_to: controller.randomuser.org
   template:
-    src="{{item}}"
+    src=remote_ipa_tunnel@.service
     dest=/etc/systemd/system/
+  register: tunnel_service_change
+- shell: systemctl daemon-reload
+  run_once: true
+  delegate_to: controller.randomuser.org
+  when: tunnel_service_change|changed
+- name: define tunnel services for each host
+  delegate_to: controller.randomuser.org
+  service:
+    name: "remote_ipa_tunnel@{{ ansible_nodename }}.service"
+    state: started
+    enabled: yes
+- fail:
+  failed_when: true
   with_items:
     - controller_impersonator.service
     - controller_impersonator_udp_sender.service
@@ -98,10 +93,10 @@
   become: True
   become_method: sudo
   systemd:
-    daemon-reload=yes
-    enabled=yes
-    name="{{item}}"
-    state=started
+    daemon-reload: yes
+    enabled: yes
+    name: "{{item}}"
+    state: started
   with_items:
     - controller_impersonator_udp_receiver.service
 
