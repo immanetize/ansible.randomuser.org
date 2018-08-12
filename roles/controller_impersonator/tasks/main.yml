@@ -22,54 +22,9 @@
 - shell: systemctl daemon-reload
   when: sender_service|changed
 - name: start the udp translator
+  run_once: true
   service:
     name: controller_impersonator_udp_sender.service
     state: started
     enabled: yes
-- fail:
-  failed_when: true
-  with_items:
-    - controller_impersonator.service
-    - controller_impersonator_udp_sender.service
-    - resolv_maintainer.timer
-    - resolv_maintainer.service
-- name: send resolv maintainer script
-  template:
-    src=resolv_maintainer.sh
-    dest=/usr/libexec/
-- name: enable the service
-  systemd:
-    daemon-reload=yes
-    enabled=yes
-    name="{{item}}"
-    state=started
-  with_items:
-    - controller_impersonator.service
-    - controller_impersonator_udp_sender.service
-    - resolv_maintainer.timer
-    - resolv_maintainer.service
-
-- name: deploy dns forwarder to controller
-  delegate_to: controller.randomuser.org
-  become: True
-  become_method: sudo
-  template:
-    src="{{item}}"
-    dest=/etc/systemd/system/
-  with_items:
-    - controller_impersonator_udp_receiver.service
-- name: enable dns forwarder on controller
-  delegate_to: controller.randomuser.org
-  become: True
-  become_method: sudo
-  systemd:
-    daemon-reload: yes
-    enabled: yes
-    name: "{{item}}"
-    state: started
-  with_items:
-    - controller_impersonator_udp_receiver.service
-
-
-
 
