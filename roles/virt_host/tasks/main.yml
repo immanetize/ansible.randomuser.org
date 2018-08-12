@@ -1,5 +1,17 @@
 - include_role: 
+    name: controller_impersonator
+- include_role: 
     name: glusterfs_server
+- set_fact:
+    other_members: "{{ ansible_play_batch | difference([ansible_nodename]) }}"
+- name: mount the volume
+  mount:
+    fstype: glusterfs
+    src: "{{ ansible_nodename }}:{{ pool.name }}"
+    path: /var/lib/libvirt/images
+    opts: "backup-volfile-servers={{ ':'.join(other_members) }}"
+    state: mounted
+
     #- fail:
     #  failed_when: True
 - name: install virt packages
@@ -48,6 +60,7 @@
       This should be a module that sets up the valentine account
       on silo with ssh keys to log into th remote hosts
 - name: seed image
+  run_once: true
   delegate_to: silo.randomuser.org
   synchronize:
     src: /srv/iso/rhel/7/images/rhel7-latest.qcow2

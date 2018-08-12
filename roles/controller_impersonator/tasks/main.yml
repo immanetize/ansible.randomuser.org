@@ -1,0 +1,110 @@
+- name: install required packages
+  dnf: 
+    name="{{item}}"
+    state=present
+  with_items:
+    - socat
+
+- name: create impersonator ip
+  iproute2:
+    address=10.27.0.89/16
+    interface=eth2
+    state=present
+- name: adjust httpd listen configuration
+  lineinfile:
+    backrefs=yes
+    state=present
+    regexp='^Listen ([0-9\.]*:)?([0-9]*)( https)?'
+    line="Listen {{ansible_eth2.ipv4.address}}:\2"
+    dest="/etc/httpd/{{item}}"
+  with_items:
+    - conf/httpd.conf
+    - conf.d/ssl.conf
+    - conf.d/nss.conf
+- name: restart apache
+  service:
+    name=httpd
+    state=restarted
+- name: create working directory
+  file:
+    group=valentine
+    owner=valentine
+    path="{{secure_path}}"
+    state=directory
+    mode=0700
+- name: create keypair
+  become: yes
+  become_user: valentine
+  shell: "
+    ssh-keygen
+      -C '{{ansible_hostname}}_controller_access'
+      -b 521
+      -f '{{ssh_key_path}}'
+      -t ed25519
+      -N '' creates={{ssh_key_path}}"
+- name: get pubkey
+  shell: cat {{secure_path}}/gateway_ed25519.pub
+  register: pubkey
+- name: insert pubkey
+  delegate_to: "{{item}}"
+  with_items:
+    - gateway.randomuser.org
+    - controller.randomuser.org
+  lineinfile:
+    dest="~valentine/.ssh/authorized_keys"
+    create=yes
+    line="{{pubkey.stdout}}"
+    state=present
+- name: copy ssh client config
+  template:
+    src=ssh_config
+    dest="{{secure_path}}"
+- name: set up controller service and socket
+  template:
+    src="{{item}}"
+    dest=/etc/systemd/system/
+  with_items:
+    - controller_impersonator.service
+    - controller_impersonator_udp_sender.service
+    - resolv_maintainer.timer
+    - resolv_maintainer.service
+- name: send resolv maintainer script
+  template:
+    src=resolv_maintainer.sh
+    dest=/usr/libexec/
+- name: enable the service
+  systemd:
+    daemon-reload=yes
+    enabled=yes
+    name="{{item}}"
+    state=started
+  with_items:
+    - controller_impersonator.service
+    - controller_impersonator_udp_sender.service
+    - resolv_maintainer.timer
+    - resolv_maintainer.service
+
+- name: deploy dns forwarder to controller
+  delegate_to: controller.randomuser.org
+  become: True
+  become_method: sudo
+  template:
+    src="{{item}}"
+    dest=/etc/systemd/system/
+  with_items:
+    - controller_impersonator_udp_receiver.service
+- name: enable dns forwarder on controller
+  delegate_to: controller.randomuser.org
+  become: True
+  become_method: sudo
+  systemd:
+    daemon-reload=yes
+    enabled=yes
+    name="{{item}}"
+    state=started
+  with_items:
+    - controller_impersonator_udp_receiver.service
+
+
+
+

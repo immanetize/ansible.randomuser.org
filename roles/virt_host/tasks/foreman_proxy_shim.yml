@@ -47,5 +47,8 @@
   when: item.type == 'virt'
   register: net_xml
 - debug: var=net_xml
+- virt:
+    name: "{{ provision_hostname }}"
+    state: running
 
 

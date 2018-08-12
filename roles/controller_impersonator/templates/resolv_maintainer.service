@@ -1,0 +1,10 @@
+[Unit]
+Description=change resolver if controller impersonator is active
+After=controller-impersonator.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash -x /usr/libexec/resolv_maintainer.sh
+
+[Install]
+WantedBy=network.target

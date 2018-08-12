@@ -1,0 +1,9 @@
+secure_path: /var/lib/controller_impersonator
+ssh_key_path: "{{secure_path}}/gateway_ed25519"
+ports:
+  - 60553
+  - 443
+  - 389
+  - 88
+  - 464
+  - 636
