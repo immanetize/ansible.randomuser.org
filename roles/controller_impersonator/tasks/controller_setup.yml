@@ -51,3 +51,27 @@
     name: "remote_ipa_tunnel@{{ ansible_nodename }}.service"
     state: started
     enabled: yes
+- name: deploy dns forwarder to controller
+  delegate_to: controller.randomuser.org
+  become: True
+  become_method: sudo
+  template:
+    src="{{item}}"
+    dest=/etc/systemd/system/
+  with_items:
+    - controller_impersonator_udp_receiver.service
+- name: enable dns forwarder on controller
+  delegate_to: controller.randomuser.org
+  become: True
+  become_method: sudo
+  systemd:
+    daemon-reload: yes
+    enabled: yes
+    name: "{{item}}"
+    state: started
+  with_items:
+    - controller_impersonator_udp_receiver.service
+
+
+
+
