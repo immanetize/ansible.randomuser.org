@@ -1,3 +1,11 @@
+---
+- name: create hostfile entries for peer group
+  lineinfile:
+    regexp: "[0-9.]* {{ item }}"
+    line: |
+      {{ hostvars[item]['ansible_%s' % hostvars[item]['gluster_interface'] ]['ipv4']['address'] | default('oops') }} {{ item }}
+    path: /etc/hosts
+  with_items: "{{ ansible_play_batch }}"
 - name: get some gluster packages
   yum:
     name: centos-release-gluster41
@@ -29,4 +37,21 @@
     src: "/dev/{{ pool.vgs }}/{{ pool.name }}"
     path: "/var/bricks/{{ pool.name }}"
     state: mounted
-- debug: var=ansible_play_batch
+- name: create a brick dir
+  file:
+    path: "/var/bricks/{{ pool.name }}/brick"
+    state: directory
+- name: create a volume 
+  run_once: true
+  gluster_volume:
+    name: "{{ pool.name }}"
+    bricks: "/var/bricks/{{ pool.name }}/brick"
+    cluster: "{{ ansible_play_batch }}"
+    host: "{{ ansible_nodename }}"
+    state: present
+- name: start the volume
+  run_once: true
+  gluster_volume:
+    name: "{{ pool.name }}"
+    state: started
+
