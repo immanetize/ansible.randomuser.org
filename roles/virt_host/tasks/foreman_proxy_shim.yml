@@ -1,5 +1,6 @@
 - set_fact:
     provision_hostname: "{{ ansible_hostname }}-proxy.randomuser.org"
+  tags: shim
 - name: get vm info
   virt:
     command: list_vms
@@ -41,14 +42,10 @@
   when: item.type == 'virt'
   failed_when: false
 - debug: msg="virsh net-update is not idempotent, this needs a module"
-- name: verify leases
-  shell: "virsh net-dumpxml {{ item.name }}"
-  with_items: "{{ interfaces }}"
-  when: item.type == 'virt'
-  register: net_xml
-- debug: var=net_xml
 - virt:
     name: "{{ provision_hostname }}"
     state: running
+- include: inventory_shim.yml
+  tags: shim
 
 

@@ -1,0 +1,28 @@
+- name: get mac
+  shell: |
+     virsh domiflist {{ provision_hostname }} | awk '$3 == "internal0" {print $NF}'
+  register: provision_mac
+  changed_when: false
+- name: get leases
+  shell: |
+    virsh net-dhcp-leases internal0 | awk '$3 == "{{ provision_mac.stdout }}" { print $5 }'
+  register: provision_address
+
+- add_host:
+    name: "{{ provision_hostname }}"
+    groups: "foreman_proxy,{{ ansible_nodename}}_tunnel"
+- meta: refresh_inventory
+- name: do a thing
+  delegate_to: "{{ provision_hostname }}"
+  delegate_facts: true
+  set_fact:
+    ansible_host: "{{ provision_address.stdout[:-3] }}"
+    ansible_ssh_common_args: "-o 'ProxyCommand ssh -p 1027 -W %h:%p {{ ansible_nodename }}' -o IdentitiesOnly=yes -vv"
+    ansible_ssh_user: valentine
+- debug: var=ansible_host
+  delegate_to: "{{ provision_hostname }}"
+- name: test connection
+  setup:
+  delegate_facts: True
+
+  delegate_to: "{{ provision_hostname }}"
