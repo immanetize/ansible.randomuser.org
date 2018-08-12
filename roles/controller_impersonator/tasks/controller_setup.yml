@@ -1,0 +1,53 @@
+- name: install required packages
+  package: 
+    name="{{item}}"
+    state=present
+  with_items:
+    - socat
+- name: create working directory
+  delegate_to: controller.randomuser.org
+  file:
+    group=valentine
+    owner=valentine
+    path="{{secure_path}}"
+    state=directory
+    mode=0700
+- name: create keypair
+  run_once: True
+  delegate_to: controller.randomuser.org
+  become: yes
+  become_user: valentine
+  shell: "
+    ssh-keygen
+      -C '{{ansible_hostname}}_controller_access'
+      -b 521
+      -f '{{ssh_key_path}}'
+      -t ed25519
+      -N '' creates={{ssh_key_path}}"
+- name: get pubkey
+  delegate_to: controller.randomuser.org
+  shell: cat {{secure_path}}/gateway_ed25519.pub
+  register: pubkey
+  changed_when: false
+- name: copy ssh client config
+  delegate_to: controller.randomuser.org
+  template:
+    src=ssh_config
+    dest="{{secure_path}}"
+- name: define service template for tunnel from controller
+  run_once: true
+  delegate_to: controller.randomuser.org
+  template:
+    src=remote_ipa_tunnel@.service
+    dest=/etc/systemd/system/
+  register: tunnel_service_change
+- shell: systemctl daemon-reload
+  run_once: true
+  delegate_to: controller.randomuser.org
+  when: tunnel_service_change|changed
+- name: define tunnel services for each host
+  delegate_to: controller.randomuser.org
+  service:
+    name: "remote_ipa_tunnel@{{ ansible_nodename }}.service"
+    state: started
+    enabled: yes

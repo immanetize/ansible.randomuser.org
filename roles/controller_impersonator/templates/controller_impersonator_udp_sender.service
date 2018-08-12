@@ -6,8 +6,6 @@ Wants=controller_impersonator.service
 [Service]
 Type=simple
 ExecStart=/usr/bin/socat -T15 udp4-recvfrom:53,reuseaddr,fork tcp:10.27.0.89:60553
-ExecReload=/bin/kill -HUP $MAINPID
-KillMode=process
 Restart=on-failure
 RestartSec=42s
 
