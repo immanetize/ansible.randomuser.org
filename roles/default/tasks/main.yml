@@ -10,6 +10,7 @@
     name: "{{item}}"
     state: latest
   with_items:
+    - net-tools
     - vim-enhanced
     - lsof
     - strace
@@ -21,15 +22,6 @@
     path: /etc/ansible/facts.d
     mode: 0700
     state: directory
-- name: ensure permissive
-  lineinfile:
-    regexp: '^(SELINUX=).*'
-    backrefs: yes
-    line: '\1permissive'
-    path: /etc/sysconfig/selinux
-  notify: 
-    - trigger autorelabel
-    - reboot
 - include: change_ssh_port.yml
   when: ansible_ssh_port == 22
 - name: apply interface zoning

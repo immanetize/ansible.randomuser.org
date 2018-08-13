@@ -21,8 +21,8 @@
     ansible_ssh_user: valentine
 - debug: var=ansible_host
   delegate_to: "{{ provision_hostname }}"
+- debug: msg="subscription manager by hand here"
 - name: test connection
-  setup:
+  import_role: name=default
   delegate_facts: True
-
   delegate_to: "{{ provision_hostname }}"

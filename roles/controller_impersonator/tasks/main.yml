@@ -9,11 +9,6 @@
     state=present
   with_items:
     - socat
-- name: push the pubkey
-  become: true
-  authorized_key:
-    user: root
-    key: "{{ pubkey.stdout }}"
 - name: deploy socat to help tunnel 53/udp
   template:
     src: controller_impersonator_udp_sender.service

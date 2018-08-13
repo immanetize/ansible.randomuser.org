@@ -2,6 +2,7 @@
     name: controller_impersonator
 - include_role: 
     name: glusterfs_server
+  when: 
 - set_fact:
     other_members: "{{ ansible_play_batch | difference([ansible_nodename]) }}"
 - name: mount the volume

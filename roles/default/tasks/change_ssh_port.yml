@@ -1,6 +1,6 @@
 - name: do not change port if selinux is disabled
   meta: end_play
-  when: ansible_selinux_status == "disabled"
+  when: ansible_selinux.status == "disabled"
 - name: get python bindings for selinux
   package:
     name: policycoreutils-python
@@ -12,8 +12,10 @@
     reload: yes
     state: present
     setype: ssh_port_t
+- setup:
+  failed_when: false
   when: ansible_selinux.status != "disabled"
-- include: add_port.yml port="1027"
+- include: add_port.yml port="1027/tcp"
 - name: ship sshd_config
   template:
     src: sshd_config.j2
