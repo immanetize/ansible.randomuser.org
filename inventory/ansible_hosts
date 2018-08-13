@@ -7,6 +7,7 @@ silo.randomuser.org
 [kube]
 public0.randomuser.org
 public1.randomuser.org
+public2.randomuser.org
 
 [workstations]
 workstation0.randomuser.org
