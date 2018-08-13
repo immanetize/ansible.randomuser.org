@@ -29,6 +29,11 @@
   shell: cat {{secure_path}}/gateway_ed25519.pub
   register: pubkey
   changed_when: false
+- name: push the pubkey
+  become: true
+  authorized_key:
+    user: root
+    key: "{{ pubkey.stdout }}"
 - name: copy ssh client config
   delegate_to: controller.randomuser.org
   template:
