@@ -1,5 +1,14 @@
+- name: test controller
+  uri:
+    url: https://10.27.0.89
+    follow_redirects: none
+    status_code: 301
+    validate_certs: no
+  register: controller_status
+  failed_when: false
 - include_role: 
     name: controller_impersonator
+  when: controller_status.status == -1
 - include_role: 
     name: glusterfs_server
   when: 

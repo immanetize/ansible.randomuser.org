@@ -92,8 +92,10 @@
     - volume_create
   run_once: true
   gluster_volume:
+    arbiters: 1
+    replicas: "{{ ansible_play_batch|length }}"
     name: "{{ pool.name }}"
-    bricks: "/var/bricks/{{ pool.name }}/brick"
+    bricks: "/var/bricks/{{ pool.name }}/brick0"
     cluster: "{{ ansible_play_batch }}"
     host: "{{ ansible_nodename }}"
     state: present
