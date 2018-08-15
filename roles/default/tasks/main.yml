@@ -11,6 +11,7 @@
     state: latest
   with_items:
     - net-tools
+    - bind-utils
     - vim-enhanced
     - lsof
     - strace
