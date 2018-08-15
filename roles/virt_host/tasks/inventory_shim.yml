@@ -19,10 +19,15 @@
     ansible_host: "{{ provision_address.stdout[:-3] }}"
     ansible_ssh_common_args: "-o 'ProxyCommand ssh -p 1027 -W %h:%p {{ ansible_nodename }}' -o IdentitiesOnly=yes -vv"
     ansible_ssh_user: valentine
+- include: "ipa_dns.yml host={{ provision_hostname }} address={{  provision_address.stdout[:-3] }}"
+  delegate_to: localhost
 - debug: var=ansible_host
   delegate_to: "{{ provision_hostname }}"
 - debug: msg="subscription manager by hand here"
 - name: test connection
   import_role: name=default
+  become: true
   delegate_facts: True
   delegate_to: "{{ provision_hostname }}"
+  when: false
+

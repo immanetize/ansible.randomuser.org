@@ -12,6 +12,11 @@
 - include_role: 
     name: glusterfs_server
   when: 
+- name: allow libvirt to use gluster
+  seboolean:
+    name: virt_use_fusefs
+    state: yes
+    persistent: yes
 - set_fact:
     other_members: "{{ ansible_play_batch | difference([ansible_nodename]) }}"
 - name: mount the volume
@@ -81,4 +86,6 @@
     command: list_vms
   register: vm_list
 - include: foreman_proxy_shim.yml
+  tags: 
+    - shim
 
