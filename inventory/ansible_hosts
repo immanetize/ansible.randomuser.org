@@ -5,11 +5,12 @@ controller
 silo.randomuser.org
 
 [kube]
-public0.randomuser.org
-public1.randomuser.org
-public2.randomuser.org
+public[0:2].randomuser.org
 
 [workstations]
 workstation0.randomuser.org
 workstation.randomuser.org
 yoga.randomuser.org
+
+[foreman_proxy]
+public[0:2]-proxy.randomuser.org

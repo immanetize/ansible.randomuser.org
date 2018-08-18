@@ -20,3 +20,9 @@
   tasks:
     - include: tasks/store_key.yml
     - debug: var=ansible_local.vars_file.taxonomy.bullshit
+- name: foreman stub
+  hosts: foreman_proxy
+  tags:
+    - foreman_proxy
+  roles:
+    - foreman_proxy

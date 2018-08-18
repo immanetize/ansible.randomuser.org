@@ -58,6 +58,15 @@
     xml: "{{ lookup('template', 'virt_net.xml.j2') }}"
   with_items: "{{ interfaces }}"
   when: item.type == 'virt'
+- name: masquerade the network
+  firewalld:
+    zone: "{{ item.zone }}"
+    immediate: yes
+    permanent: yes
+    masquerade: yes
+    state: enabled
+  with_items: "{{ interfaces }}"
+  when: item.type == 'virt'
 - name: start the network
   virt_net:
     name: "{{ item.name }}"
