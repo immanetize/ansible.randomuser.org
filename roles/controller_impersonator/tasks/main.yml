@@ -17,7 +17,6 @@
 - shell: systemctl daemon-reload
   when: sender_service|changed
 - name: start the udp translator
-  run_once: true
   service:
     name: controller_impersonator_udp_sender.service
     state: started
