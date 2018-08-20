@@ -1,5 +1,5 @@
 - name: default stub
-  hosts: kube
+  hosts: all
   gather_facts: False
   become: True
   tags:
@@ -13,6 +13,13 @@
   become: True
   roles:
     - virt_host
+- name: impersonator stub
+  hosts: kube
+  become: True
+  tags:
+    - impersonator
+  roles:
+    - controller_impersonator
 - name: fact stub
   hosts: kube
   tags:

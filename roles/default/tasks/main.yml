@@ -24,7 +24,8 @@
     mode: 0700
     state: directory
 - include: change_ssh_port.yml
-  when: ansible_ssh_port == 22
+  when: false
+  #  this logic does notwork for hosts behind nat
 - name: apply interface zoning
   firewalld:
     immediate: yes

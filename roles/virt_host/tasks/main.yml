@@ -83,6 +83,7 @@
     msg:  |
       This should be a module that sets up the valentine account
       on silo with ssh keys to log into th remote hosts
+- include: foreman_virtuser_setup.yml
 - name: seed image
   run_once: true
   delegate_to: silo.randomuser.org

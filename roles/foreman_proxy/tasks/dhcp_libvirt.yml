@@ -1,0 +1,19 @@
+- name: deploy the template
+  become: true
+  copy:
+    content: |
+        ---
+        :network: {{ foreman_plugins[plugin].network }}
+        :url: {{ foreman_plugins[plugin].url }}
+    dest: "{{ config_path }}"
+- name: define provider    
+  become: true
+  copy:
+    dest: /etc/foreman-proxy/settings.d/dhcp.yml
+    content: |
+        ---
+        :enabled: https
+        :use_provider: dhcp_libvirt
+- debug: var=true
+
+

@@ -1,0 +1,4 @@
+foreman_plugins:
+  dhcp_libvirt:
+    network: internal0
+    url: qemu:///system

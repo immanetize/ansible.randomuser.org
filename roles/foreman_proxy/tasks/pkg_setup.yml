@@ -1,0 +1,27 @@
+- name: install foreman and epel repos
+  become: true
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: 
+    - https://yum.theforeman.org/releases/latest/el7/x86_64/foreman-release.rpm
+    - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+- name: enable optional addons for rhel
+  become: true
+  rhsm_repository:
+    name:  rhel-7-server-optional-rpms 
+    state: present
+  when: ( ansible_distribution == "RedHat" ) 
+- name: install new signing keys
+  become: true
+  rpm_key:
+    key: "{{ item }}" 
+    state: present
+  with_items: 
+    - /etc/pki/rpm-gpg/RPM-GPG-KEY-foreman
+    - /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+- name: install foreman-proxy
+  become: true
+  package:
+    name: foreman-proxy
+    state: present

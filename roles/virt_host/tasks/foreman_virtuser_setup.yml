@@ -1,0 +1,15 @@
+- name: add foreman group
+  group:
+    name: foreman
+- name: add foreman user
+  user:
+    groups: libvirt
+    name: foreman
+    system: yes
+    group: foreman
+- name: upload pubkey
+  authorized_key:
+    key: |
+      ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDK01MOeLPXgBxmAFs+TImI4/eWJNTv7Kn0esvmo+0whewGkcR6rCYj1TqjRzImMZza6xnEsm6OCJODoesrWBO29gWZx3lEXTbZ0jhdHcJAclGO0mMipVhX8D5HejLmT8ij60rx3eoRaYlG736xAg9N3w6G1BRcX2byZoko9oNTb6/ZofDqHvDbrG36x3Dg3OsPl/gX00szzYJGmRDT0gvXKwjuQYX5Jpai3BXw0QDDCDrDVzrqjo4qzEq77F5h9UxP7tHiim31YZC7r3bbVU7rwZLNQYiPGIS0y6Mud6pebP6fzdImJCMnmmPUmR4GWTEEpFelri1YaOlYNdbMvwo7 foreman@foreman.randomuser.org
+    user: foreman
+
