@@ -33,3 +33,10 @@
     - foreman_proxy
   roles:
     - foreman_proxy
+- name: replica stub
+  hosts: replicas
+  tags:
+    - replica
+  roles:
+    - controller_base
+    - replica
