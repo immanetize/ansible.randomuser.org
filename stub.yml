@@ -32,6 +32,7 @@
   tags:
     - foreman_proxy
   roles:
+    - ipa_client
     - foreman_proxy
 - name: replica stub
   hosts: replicas
