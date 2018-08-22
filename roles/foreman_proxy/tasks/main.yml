@@ -1,0 +1,14 @@
+- name: test foreman-proxy presence
+  package:
+    name: foreman-proxy
+    state: present
+  failed_when: false
+  register: pkg_test
+- include_tasks: pkg_setup.yml
+  when: pkg_test.rc != 0
+- include_tasks: "{{ plugin }}.yml config_path='/etc/foreman-proxy/settings.d/{{ plugin }}.yml'"
+  loop: "{{ foreman_plugins.keys() }}"
+  loop_control:
+    loop_var: plugin
+
+

@@ -1,17 +1,20 @@
 ansible_ssh_port: 1027        
-gluster_interface: enp4s0
+gluster_interface: enp5s0
 interfaces:
   - name: internal0
     type: virt
     zone: internal
-    address: 10.27.32.1
+    address: 10.27.48.1
     netmask: 255.255.240.0
     dhcp:
-      start: 10.27.32.100
-      end: 10.27.47.254
-  - name: enp3s0
-    type: ethernet
-    zone: public
+      start: 10.27.48.100
+      end: 10.27.53.254
   - name: enp4s0
     type: ethernet
+    zone: public
+  - name: enp5s0
+    type: ethernet
     zone: external
+
+
+

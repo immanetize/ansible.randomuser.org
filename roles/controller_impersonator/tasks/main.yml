@@ -1,0 +1,24 @@
+- include: controller_setup.yml
+- include: impersonator_interface.yml
+- include: "access_policy.yml zone=internal"
+  with_items:
+    - internal
+- name: install required packages
+  package: 
+    name="{{item}}"
+    state=present
+  with_items:
+    - socat
+- name: deploy socat to help tunnel 53/udp
+  template:
+    src: controller_impersonator_udp_sender.service
+    dest: /etc/systemd/system/
+  register: sender_service
+- shell: systemctl daemon-reload
+  when: sender_service|changed
+- name: start the udp translator
+  service:
+    name: controller_impersonator_udp_sender.service
+    state: started
+    enabled: yes
+

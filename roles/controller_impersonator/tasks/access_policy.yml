@@ -1,0 +1,25 @@
+---
+- name: firewall services on target zone
+  firewalld:
+    immediate: yes
+    permanent: yes
+    service: "{{ item }}"
+    state: enabled
+    zone: "{{ zone }}"
+  with_items:
+    - freeipa-ldap 
+    - kerberos
+    - freeipa-ldaps
+    - dns
+
+- name: firewall ports on target zone
+  firewalld:
+    immediate: yes
+    permanent: yes
+    port: "{{ item }}"
+    state: enabled
+    zone: "{{ zone }}"
+  with_items:
+    - 8443/tcp
+    - 464/tcp
+    - 8080/tcp

@@ -1,0 +1,16 @@
+[Unit]
+Description=ssh tunnel for %i
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/sysconfig/remote_ipa_tunnel
+EnvironmentFile=-/etc/sysconfig/remote_ipa_tunnel_%i
+User=valentine
+Type=forking
+ExecStart=/usr/bin/ssh -4 -F {{secure_path}}/ssh_config  {% for port in ports %} -R 10.27.0.89:{{port}}:10.27.0.89:{{port}} {% endfor %} %i -Nnf $SSH_OPTS
+KillMode=control-group
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target

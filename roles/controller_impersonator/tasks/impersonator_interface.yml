@@ -1,0 +1,15 @@
+- name: install packages needed for interface management
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-gobject
+    - NetworkManager-glib
+
+- name: create impersonator tun
+  nmcli:
+    conn_name: controller0
+    ifname: controller0
+    ip4: 10.27.0.89/20
+    state: present
+    type: bridge

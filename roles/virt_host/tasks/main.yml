@@ -1,5 +1,32 @@
+- name: test controller
+  uri:
+    url: https://10.27.0.89
+    follow_redirects: none
+    status_code: 301
+    validate_certs: no
+  register: controller_status
+  failed_when: false
+- include_role: 
+    name: controller_impersonator
+  when: controller_status.status == -1
 - include_role: 
     name: glusterfs_server
+  when: 
+- name: allow libvirt to use gluster
+  seboolean:
+    name: virt_use_fusefs
+    state: yes
+    persistent: yes
+- set_fact:
+    other_members: "{{ ansible_play_batch | difference([ansible_nodename]) }}"
+- name: mount the volume
+  mount:
+    fstype: glusterfs
+    src: "{{ ansible_nodename }}:{{ pool.name }}"
+    path: /var/lib/libvirt/images
+    opts: "backup-volfile-servers={{ ':'.join(other_members) }}"
+    state: mounted
+
     #- fail:
     #  failed_when: True
 - name: install virt packages
@@ -31,6 +58,15 @@
     xml: "{{ lookup('template', 'virt_net.xml.j2') }}"
   with_items: "{{ interfaces }}"
   when: item.type == 'virt'
+- name: masquerade the network
+  firewalld:
+    zone: "{{ item.zone }}"
+    immediate: yes
+    permanent: yes
+    masquerade: yes
+    state: enabled
+  with_items: "{{ interfaces }}"
+  when: item.type == 'virt'
 - name: start the network
   virt_net:
     name: "{{ item.name }}"
@@ -47,7 +83,9 @@
     msg:  |
       This should be a module that sets up the valentine account
       on silo with ssh keys to log into th remote hosts
+- include: foreman_virtuser_setup.yml
 - name: seed image
+  run_once: true
   delegate_to: silo.randomuser.org
   synchronize:
     src: /srv/iso/rhel/7/images/rhel7-latest.qcow2
@@ -58,4 +96,6 @@
     command: list_vms
   register: vm_list
 - include: foreman_proxy_shim.yml
+  tags: 
+    - shim
 

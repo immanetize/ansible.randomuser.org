@@ -1,6 +1,46 @@
+---
+- name: create hostfile entries for peer group
+  lineinfile:
+    regexp: "[0-9.]* {{ item }}"
+    line: |
+      {{ hostvars[item]['ansible_%s' % hostvars[item]['gluster_interface'] ]['ipv4']['address'] | default('oops') }} {{ item }}
+    path: /etc/hosts
+  with_items: "{{ ansible_play_batch }}"
 - name: get some gluster packages
   yum:
     name: centos-release-gluster41
+    state: present
+  when: ansible_distribution == "CentOS"
+- rhsm_repository:
+    name: rh-gluster-3-for-rhel-7-server-rpms
+    state: present
+  when: ansible_distribution == "RedHat" and supported_gluster is defined
+- name: define centos gluster repo
+  when: ansible_distribution == "RedHat" 
+  copy:
+    dest: /etc/yum.repos.d/CentOS-Gluster-4.1.repo 
+    content: |
+       # CentOS-Gluster-4.1.repo
+       #
+       # Please see http://wiki.centos.org/SpecialInterestGroup/Storage for more
+       # information
+      
+       [centos-gluster41]
+       name=CentOS-7 - Gluster 4.1 (Long Term Maintanance)
+       baseurl=http://mirror.centos.org/centos-7/7/storage/$basearch/gluster-4.1/
+       gpgcheck=1
+       enabled=1
+       gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Storage
+      
+       [centos-gluster41-test]
+       name=CentOS-7 - Gluster 4.1 Testing (Long Term Maintenance)
+       baseurl=http://buildlogs.centos.org/centos/7/storage/$basearch/gluster-4.1/
+       gpgcheck=0
+       enabled=0
+       gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Storage
+- name: install rpmkey for centos storage sig
+  rpm_key:
+    key: https://raw.githubusercontent.com/CentOS-Storage-SIG/centos-release-storage-common/master/RPM-GPG-KEY-CentOS-SIG-Storage
     state: present
 - name: install server software
   yum: 
@@ -8,7 +48,6 @@
     state: present
   with_items:
     - glusterfs-server
-    - heketi
 - include_role: name=heketi
   when: containerized_heketi == false
 - name: create a brick
@@ -28,4 +67,43 @@
     src: "/dev/{{ pool.vgs }}/{{ pool.name }}"
     path: "/var/bricks/{{ pool.name }}"
     state: mounted
-- debug: var=ansible_play_batch
+- name: create a brick dir
+  file:
+    path: "/var/bricks/{{ pool.name }}/brick"
+    state: directory
+- name: start the daemon
+  service:
+    name: glusterd
+    state: started
+    enabled: yes
+- debug: var=interfaces
+- name: adjust firewall
+  firewalld:
+    service: glusterfs
+    state: enabled
+    permanent: true
+    immediate: yes
+    zone: "{{ item.zone }}"
+  with_items: "{{ interfaces }}"
+  when: item.name == gluster_interface
+
+- name: create a volume 
+  tags: 
+    - volume_create
+  run_once: true
+  gluster_volume:
+    arbiters: 1
+    replicas: "{{ ansible_play_batch|length }}"
+    name: "{{ pool.name }}"
+    bricks: "/var/bricks/{{ pool.name }}/brick0"
+    cluster: "{{ ansible_play_batch }}"
+    host: "{{ ansible_nodename }}"
+    state: present
+- name: start the volume
+  tags: 
+    - volume_create
+  run_once: true
+  gluster_volume:
+    name: "{{ pool.name }}"
+    state: started
+

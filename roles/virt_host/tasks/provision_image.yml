@@ -9,4 +9,5 @@
     src: user_data.j2
     dest: "/tmp/user_data_{{ provision_hostname }}.cfg"
 - name: apply cloud_config to the image
+  become: true
   shell: "virt-copy-in -a  {{ seed_image }} /tmp/user_data_{{ provision_hostname }}.cfg /etc/cloud/cloud.cfg.d/"

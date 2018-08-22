@@ -1,0 +1,17 @@
+- shell: echo "{{ ipa_pass }}" | kinit pete@RANDOMUSER.ORG
+- name: check for existing record
+  shell: |
+    ipa dnsrecord-show {{ domain|default('randomuser.org') }} {{ host }} | \
+    awk '$1 == "A" {print $NF}'
+  register: current_record
+  failed_when: false
+- debug: var=current_record
+- debug: var=address
+- name: update record
+  shell: |
+    ipa dnsrecord-mod {{ domain|default('randomuser.org') }} {{ host }} --a-ip-address={{ address }}
+  when: ( current_record.stdout != address ) and ( "ERROR" not in current_record.stderr )
+- name: add record
+  shell: |
+    ipa dnsrecord-add {{ domain|default('randomuser.org') }} {{ host }} --a-ip-address={{ address }}
+  when: ( "resource record not found" in current_record.stderr )

@@ -1,5 +1,5 @@
 - name: default stub
-  hosts: kube
+  hosts: all
   gather_facts: False
   become: True
   tags:
@@ -13,6 +13,13 @@
   become: True
   roles:
     - virt_host
+- name: impersonator stub
+  hosts: kube
+  become: True
+  tags:
+    - impersonator
+  roles:
+    - controller_impersonator
 - name: fact stub
   hosts: kube
   tags:
@@ -20,3 +27,17 @@
   tasks:
     - include: tasks/store_key.yml
     - debug: var=ansible_local.vars_file.taxonomy.bullshit
+- name: foreman stub
+  hosts: foreman_proxy
+  tags:
+    - foreman_proxy
+  roles:
+    - ipa_client
+    - foreman_proxy
+- name: replica stub
+  hosts: replicas
+  tags:
+    - replica
+  roles:
+    - controller_base
+    - replica
