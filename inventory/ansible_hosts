@@ -14,3 +14,12 @@ yoga.randomuser.org
 
 [foreman_proxy]
 public[0:2]-proxy.randomuser.org
+
+      
+[kube-master]
+public[0:1].randomuser.org
+[etcd]
+public[0:2]-proxy.randomuser.org
+[kube-node]
+public[0:2]-proxy.randomuser.org
+

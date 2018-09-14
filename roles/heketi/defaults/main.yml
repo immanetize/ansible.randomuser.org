@@ -1,6 +1,0 @@
----
-gluster_hosts: "{{ ansible_play_batch }}"
-heketi_port: 8080
-heketi_keydir: /etc/heketi/ssh_keys
-heketi_keypath: "{{ heketi_keydir }}/heketi_key"
-heketi_executor: "heketi_executor"
