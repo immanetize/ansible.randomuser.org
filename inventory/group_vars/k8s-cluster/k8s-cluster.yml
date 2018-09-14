@@ -87,12 +87,12 @@ kube_network_plugin: calico
 # weave_extra_args: ~
 
 # Kubernetes internal network for services, unused block of space.
-kube_service_addresses: 10.233.0.0/18
+kube_service_addresses: 10.27.144.0/20
 
 # internal network. When used, it will assign IP
 # addresses from this range to individual pods.
 # This network must be unused in your network infrastructure!
-kube_pods_subnet: 10.233.64.0/18
+kube_pods_subnet: 10.27.64.0/18
 
 # internal network node size allocation (optional). This is the size allocated
 # to each node on your network.  With these defaults you should have
@@ -158,17 +158,18 @@ kubernetes_audit: false
 podsecuritypolicy_enabled: false
 
 # Make a copy of kubeconfig on the host that runs Ansible in {{ inventory_dir }}/artifacts
-# kubeconfig_localhost: false
+kubeconfig_localhost: true
 # Download kubectl onto the host that runs Ansible in {{ bin_dir }}
-# kubectl_localhost: false
+kubectl_localhost: true
 
 # dnsmasq
-# dnsmasq_upstream_dns_servers:
+dnsmasq_upstream_dns_servers:
+  - /randomuser.org/10.27.0.89
 #  - /resolvethiszone.with/10.0.4.250
 #  - 8.8.8.8
 
 #  Enable creation of QoS cgroup hierarchy, if true top level QoS and pod cgroups are created. (default true)
-# kubelet_cgroups_per_qos: true
+kubelet_cgroups_per_qos: true
 
 # A comma separated list of levels of node allocatable enforcement to be enforced by kubelet.
 # Acceptable options are 'pods', 'system-reserved', 'kube-reserved' and ''. Default is "".
