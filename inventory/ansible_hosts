@@ -16,10 +16,21 @@ yoga.randomuser.org
 public[0:2]-proxy.randomuser.org
 
       
+public0.randomuser.org ansible_host=23.227.161.102 ip=10.255.53.142 etcd_member_name=public0_etcd
+public1.randomuser.org ansible_host=23.227.161.138 ip=10.255.53.186 etcd_member_name=public1_etcd
+public2.randomuser.org ansible_host=107.155.97.146 ip=10.255.68.126 etcd_member_name=public2_etcd
+
+
 [kube-master]
-public[0:1].randomuser.org
+public0.randomuser.org 
+public1.randomuser.org
+public2.randomuser.org
 [etcd]
-public[0:2]-proxy.randomuser.org
+public0.randomuser.org
+public1.randomuser.org
+public2.randomuser.org
 [kube-node]
-public[0:2]-proxy.randomuser.org
+public0.randomuser.org
+public1.randomuser.org
+public2.randomuser.org
 
