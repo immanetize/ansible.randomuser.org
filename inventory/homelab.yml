@@ -2,3 +2,17 @@ homelab:
   hosts:
     gateway:
     silo:
+  children:
+    storage:
+      silo:
+    compute:
+      children:
+        fast:
+          hosts:
+            epsilon:
+        slow:
+          hosts:
+            alpha:
+        median:
+          hosts:
+            delta:

@@ -1,0 +1,28 @@
+- hosts: storage
+  gather_facts: false
+  become: false
+  tags: 
+    - storage
+  tasks:
+    - ping:
+    - setup:
+      become: true
+- hosts: compute
+  gather_facts: false
+  become: false
+  tags: 
+    - compute
+  tasks:
+    - ping:
+    - setup:
+      become: true
+- hosts: gateway
+  gather_facts: false
+  become: false
+  tags: 
+    - gateway
+  tasks:
+    - ping:
+    - setup:
+      become: true       
+        
