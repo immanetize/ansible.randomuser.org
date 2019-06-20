@@ -1,0 +1,6 @@
+- name: bootstrap a foreman provisioner VM
+  hosts: 
+    - fast[0]
+  tasks:
+    - include_role:
+        name: libvirt_bootstrap

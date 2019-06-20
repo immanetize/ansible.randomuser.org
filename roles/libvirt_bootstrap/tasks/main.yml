@@ -1,0 +1,12 @@
+- name: sanity check
+  fail:
+  failed_when: ( ansible_os_family != "RedHat" )
+- name: install libvirt package group
+  yum:
+    name: |
+      {{ '@virtualization' if ansible_distribution == 'Fedora' else '@virtualization-host-environment' if ansible_distribution == 'CentOS' else '' }}
+    state: present
+- name: turn the thang on
+  service:
+    name: libvirtd
+    state: started
