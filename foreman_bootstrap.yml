@@ -4,3 +4,9 @@
   tasks:
     - include_role:
         name: libvirt_bootstrap
+    - name: get an el7 image
+      unarchive: 
+        dest: /var/lib/libvirt/images/
+        src: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.raw.tar.gz
+        remote_src: yes
+    
