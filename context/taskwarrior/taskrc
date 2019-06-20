@@ -1,4 +1,0 @@
-data.location=~/ansible.randomuser.org/context/taskwarrior
-
-include /usr/share/task/solarized-dark-256.theme
-include /usr/share/doc/task/rc/holidays.en-US.rc

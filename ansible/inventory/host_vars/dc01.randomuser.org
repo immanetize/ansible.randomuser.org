@@ -1,6 +1,0 @@
----
-- network:
-  - name: randomuser0
-    type: bridge
-    ipv4: 10.27.100.100/16
-    gw4: 10.27.0.3
