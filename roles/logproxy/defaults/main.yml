@@ -1,3 +1,4 @@
+deploy_changed: false
 rsyslog_all_interesting_packages:
   - rsyslog
   - rsyslog-doc
@@ -7,3 +8,17 @@ rsyslog_all_interesting_packages:
   - rsyslog-elasticsearch
   - rsyslog-gssapi
   - rsyslog-crypto
+
+rsyslog_snmp:
+  - label: default
+    trap_facilities:
+      - name: kern
+        levels: 
+          - emerg
+          - alert
+          - crit
+    server: "{{ snmp_relay | default('localhost') }}"
+    port: 162
+    transport: udp
+
+

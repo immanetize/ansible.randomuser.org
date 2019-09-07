@@ -3,4 +3,15 @@
     src: rsyslog.conf.j2
     dest: /etc/rsyslog.conf
   register: baseconf_deploy
+- name: configure snmp trap for emergency messages
+  template:
+    src: snmp.conf.j2
+    dest: /etc/rsyslog.d/trap.conf
+  register: trap_deploy
+  when: snmp_relay is defined
+- set_fact:
+    deploy_changed: True
+  when: ( baseconf_deploy.changed ) or
+        ( trap_deploy.changed )
+
     

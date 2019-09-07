@@ -1,0 +1,24 @@
+# environment snmp traps
+module(load="omsnmp")
+{% for set in rsyslog_snmp %}
+# {{ set.label }} trap
+{% for f in set.trap_facilities -%}
+      {%- for l in f.levels -%}
+      {{ f.name }}.{{ l }}
+      {%- if not loop.last -%}
+      ;
+      {%- else -%}
+      {{'   '}}action(type="omsnmp"
+      queue.type="disk"
+      queue.size="256"
+      queue.filename="trap"
+      server="{{ set.server }}"
+      version="1"
+      community="{{ snmp_community | default('public') }}"
+      )
+
+      {% endif %}{% endfor %}
+{% endfor %}
+
+{% endfor  %}
+

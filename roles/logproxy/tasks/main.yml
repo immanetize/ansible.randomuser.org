@@ -6,11 +6,12 @@
 - name: debug package change
   include_tasks: rsyslog_pkg_change.yml
   when: rsyslog_package_state.changed
+- debug: var=rsyslog_snmp[0]['trap_facilities']
 - name: configure syslog receivers
   include_tasks: rsyslog_listen.yml
 - name: start or restart, enable rsyslog if needed
   service:
     name: rsyslog
-    state: "{{ 'restarted' if baseconf_deploy.changed else 'started' }}"
+    state: "{{ 'restarted' if deploy_changed else 'started' }}"
     enabled: yes
 

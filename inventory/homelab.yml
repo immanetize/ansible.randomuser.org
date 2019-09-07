@@ -2,12 +2,15 @@ homelab:
   hosts:
     gateway:
     silo:
+  vars: 
+    snmp_relay: trap0.randomuser.org
   children:
     syslog_proxy:
       hosts:
         logproxy0.randomuser.org:
     storage:
-      silo:
+      children:
+        silo:
     compute:
       children:
         fast:
