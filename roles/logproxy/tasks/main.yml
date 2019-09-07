@@ -1,0 +1,16 @@
+- name: install rsyslog packages
+  dnf:
+    name: "{{ ','.join( rsyslog_packages | default ( rsyslog_all_interesting_packages ) ) }}"
+    state: latest
+  register: rsyslog_package_state
+- name: debug package change
+  include_tasks: rsyslog_pkg_change.yml
+  when: rsyslog_package_state.changed
+- name: configure syslog receivers
+  include_tasks: rsyslog_listen.yml
+- name: start or restart, enable rsyslog if needed
+  service:
+    name: rsyslog
+    state: "{{ 'restarted' if baseconf_deploy.changed else 'started' }}"
+    enabled: yes
+

@@ -1,0 +1,6 @@
+- name: ship base rsyslog.conf ( no free local file log )
+  template:
+    src: rsyslog.conf.j2
+    dest: /etc/rsyslog.conf
+  register: baseconf_deploy
+    

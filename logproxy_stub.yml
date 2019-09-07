@@ -1,0 +1,7 @@
+- name: play with syslog transport
+  hosts:
+    - syslog_proxy
+  tasks:
+    - include_role:
+        name: logproxy
+

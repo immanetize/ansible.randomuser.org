@@ -1,0 +1,25 @@
+- name: print debug output from change task
+  debug: var=rsyslog_package_state
+- name: get changelog info from package
+  shell: |
+    rpm -q --changelog {{ item }}
+  with_items: "{{ rsyslog_packages | default( rsyslog_all_interesting_packages ) }}"
+  register: changelogs
+- name: check for package changelogs
+  shell: | 
+    rpm -qd {{ item }} | \
+      egrep -i 'news|change|' | \
+      while read doc; do
+        echo "----- BEGIN $doc CONTENT-----"
+        cat $doc
+        echo "----- END $doc CONTENT-----"
+      done
+  register: changedoc
+  with_items: "{{ rsyslog_packages | default( rsyslog_all_interesting_packages ) }}"
+- name: give the report
+  copy:
+    dest: /root/rsyslog_package_change.report
+    content: |
+      {{ changelogs |pprint  }}
+      {{ changeddoc |pprint }}
+

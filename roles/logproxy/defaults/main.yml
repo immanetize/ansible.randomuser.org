@@ -1,0 +1,9 @@
+rsyslog_all_interesting_packages:
+  - rsyslog
+  - rsyslog-doc
+  - rsyslog-mongodb
+  - rsyslog-rabbitmq
+  - rsyslog-snmp
+  - rsyslog-elasticsearch
+  - rsyslog-gssapi
+  - rsyslog-crypto
