@@ -9,6 +9,8 @@
 - debug: var=rsyslog_snmp[0]['trap_facilities']
 - name: configure syslog receivers
   include_tasks: rsyslog_listen.yml
+- name: configure syslog collectors
+  include_tasks: rsyslog_collect.yml
 - name: start or restart, enable rsyslog if needed
   service:
     name: rsyslog

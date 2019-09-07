@@ -1,0 +1,16 @@
+- name: conjure cache directory
+  file:
+    path: /var/cache/rsyslog
+    state: directory
+    mode: 0750
+- name: local file log from remote insecure input
+  template:
+    src: local_write_of_remote_input.conf.j2
+    dest: /etc/rsyslog.d/local_write_of_remote_input.conf
+  register: lwr_deploy
+
+- set_fact:
+    deploy_changed: True
+  when:
+    ( lwr_deploy.changed )
+

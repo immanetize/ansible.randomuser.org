@@ -11,6 +11,7 @@ input(type="imudp"
   ratelimit.interval="10"
   ratelimit.burst="20000"
   name="default"
+  ruleset="remote_insecure"
   )
 
 module(load="imtcp"
@@ -30,6 +31,7 @@ input(type="imtcp"
   address="*"
   ratelimit.interval="10"
   ratelimit.burst="20000"
+  ruleset="remote_insecure"
   )
   
   

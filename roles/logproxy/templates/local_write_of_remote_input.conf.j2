@@ -1,0 +1,44 @@
+template(name="hostname_file_template" 
+  type="string"
+  string="/var/log/%source%/%syslogfacility-text%.log")
+ 
+template(name="remote_received" type="list") {
+  property(name="timereported" dateformat="rfc3339")
+  constant(value=" ")
+  property(name="hostname")
+  constant(value="[")
+  property(name="fromhost-ip")
+  constant(value="]")
+  constant(value=" ")
+  property(name="syslogtag")
+  constant(value=" ")
+  property(name="msg" spifno1stsp="on")
+  property(name="msg" droplastlf="on")
+  constant(value="\n")
+                                }
+
+ruleset(name="remote_insecure"
+  queue.filename="remote_insecure"
+  queue.spoolDirectory="/var/cache/rsyslog"
+  queue.maxDiskSpace="256m"
+  queue.workerThreads="2"
+  queue.saveOnShutdown="on"
+  queue.type="LinkedList"
+  ) {
+  if prifilt("user.*") then {
+    action(type="omfile" 
+      dynaFile="hostname_file_template"
+      template="remote_received"
+      dirCreateMode="0700"
+      createDirs="on"
+      )
+    stop
+    }
+    action(type="omfile" 
+      dynaFile="hostname_file_template"
+      dirCreateMode="0700"
+      template="remote_received"
+      createDirs="on"
+      )
+   }
+
