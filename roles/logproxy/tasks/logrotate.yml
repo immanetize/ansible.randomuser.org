@@ -1,0 +1,6 @@
+- name: install logrotate
+  dnf:
+    name: logrotate
+    state: latest
+- debug:
+    msg: template out logrotate configs when syslog configs are better templated

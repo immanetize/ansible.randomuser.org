@@ -18,4 +18,5 @@
     name: rsyslog
     state: "{{ 'restarted' if deploy_changed else 'started' }}"
     enabled: yes
-
+- name: set up log rotation
+  include_tasks: logrotate.yml
