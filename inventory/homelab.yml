@@ -3,6 +3,9 @@ homelab:
     gateway:
     silo:
   children:
+    syslog_proxy:
+      hosts:
+        logproxy0.randomuser.org:
     storage:
       silo:
     compute:
