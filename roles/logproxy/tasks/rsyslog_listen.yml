@@ -3,6 +3,11 @@
     src: rsyslog.conf.j2
     dest: /etc/rsyslog.conf
   register: baseconf_deploy
+- name: configure udp listening socket
+  template:
+    src: listen.conf.j2
+    dest: /etc/rsyslog.d/listen.conf
+  register: listen_deploy
 - name: configure snmp trap for emergency messages
   template:
     src: snmp.conf.j2
@@ -12,6 +17,7 @@
 - set_fact:
     deploy_changed: True
   when: ( baseconf_deploy.changed ) or
-        ( trap_deploy.changed )
+        ( trap_deploy.changed ) or
+        ( listen_deploy.changed )
 
     
