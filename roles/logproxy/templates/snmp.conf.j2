@@ -4,9 +4,9 @@ module(load="omsnmp")
 # {{ set.label }} trap
 {% for f in set.trap_facilities -%}
       {%- for l in f.levels -%}
-      {{ f.name }}.{{ l }}
+      ={{ f.name }}.{{ l }}
       {%- if not loop.last -%}
-      ;
+      ,
       {%- else -%}
       {{'   '}}action(type="omsnmp"
       queue.type="disk"

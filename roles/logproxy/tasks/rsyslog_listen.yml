@@ -3,11 +3,20 @@
     src: rsyslog.conf.j2
     dest: /etc/rsyslog.conf
   register: baseconf_deploy
-- name: configure udp listening socket
+- name: configure default listening socket
   template:
     src: listen_insecure.conf.j2
     dest: /etc/rsyslog.d/listen_insecure.conf
   register: listen_insecure_deploy
+- name: allow connections
+  firewalld:
+    permanent: yes
+    immediate: yes
+    port: "{{ item }}"
+    state: enabled
+  with_items:
+    - 514/tcp
+    - 514/udp
 - name: configure snmp trap for emergency messages
   template:
     src: snmp.conf.j2
