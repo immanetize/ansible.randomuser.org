@@ -11,6 +11,8 @@
   include_tasks: rsyslog_listen.yml
 - name: configure syslog collectors
   include_tasks: rsyslog_collect.yml
+- name: configure syslog statistics
+  include_tasks: rsyslog_stats.yml
 - name: start or restart, enable rsyslog if needed
   service:
     name: rsyslog

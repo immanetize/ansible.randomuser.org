@@ -1,0 +1,10 @@
+- name: deploy statistics template
+  template:
+    src: stats.conf.j2
+    dest: /etc/rsyslog.d/stats.conf
+  register: stats_deploy
+- set_fact:
+    deploy_changed: True
+  when:
+    ( stats_deploy.changed )
+

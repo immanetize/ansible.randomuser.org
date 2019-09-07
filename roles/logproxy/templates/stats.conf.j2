@@ -1,0 +1,15 @@
+module(load="impstats"
+  interval="120"
+  format="json"
+  ruleset="stats"
+  )
+
+template(name="stats_file"
+  type="string"
+  string="/var/log/rsyslog_stats/%source:::secpath-replace%.log"
+  )
+ruleset(name="stats") {
+  action(type="omfile"
+  DynaFile="stats_file"
+  )
+  }
