@@ -1,0 +1,45 @@
+#- name: get keytab?
+#  delegate_to: localhost
+#  shell: echo '{{prompt_pass}}' | kinit pete@RANDOMUSER.ORG
+#  register: klist
+#- debug: var=klist
+- name: fetch cert ( may require auth in session on controller )
+  delegate_to: localhost
+  shell: "curl --negotiate --user : {{ rsyslog_cert }}"
+  register: fetched_cert
+
+- name: fetch key ( may require auth in session on controller )
+  delegate_to: localhost
+  shell: "curl --negotiate --user : {{ rsyslog_key }}" 
+  register: fetched_key
+- name: sanity check
+  fail: 
+  failed_when:
+    ( 'could not verify' in fetched_cert.stdout ) or
+    ( 'could not verify' in fetched_key.stdout )
+- name: install cert
+  copy:
+    content: "{{ fetched_cert.stdout }}"
+    dest: "{{ cert_path }}"
+  register: cert_deploy
+- name: install key
+  copy:
+    content: "{{ fetched_key.stdout }}"
+    dest: "{{ key_path }}"
+  register: key_deploy
+
+
+- name: create rsyslog config
+  template:
+    src: listen_tls.conf.j2
+    dest: /etc/rsyslog.d/listen_tls.conf
+  register: tls_listen_deploy
+
+- set_fact:
+  deploy_changed: True
+  when: 
+    ( cert_deploy.changed ) or
+    ( key_deploy.changed ) or
+    ( tls_listen_deploy.changed )
+
+    

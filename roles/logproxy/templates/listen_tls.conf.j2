@@ -1,0 +1,33 @@
+# we only get to load a module once, make it count
+global(
+    DefaultNetstreamDriver="gtls"
+#    DefaultNetstreamDriverCAFile="/path/to/contrib/gnutls/ca.pem"
+    DefaultNetstreamDriverCertFile="{{ cert_path }}"
+    DefaultNetstreamDriverKeyFile="{{ key_path }}"
+		)
+                      
+module(load="imtcp"
+  NotifyOnConnectionClose="on"
+  KeepAlive="on"
+  KeepAlive.Probes="3"
+  KeepAlive.Time="15"
+  MaxListeners="64"
+  MaxSessions="256"
+  StreamDriver.Name="gtls"
+  StreamDriver.AuthMode="x509/name"
+  StreamDriver.Mode="1"
+  PermittedPeer=["silo.randomuser.org"]
+  )
+
+input(type="imtcp"
+  name="default"
+  port="6514"
+  address="*"
+  ratelimit.interval="10"
+  ratelimit.burst="20000"
+  ruleset="remote_insecure"
+  )
+  
+  
+
+

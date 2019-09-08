@@ -1,4 +1,8 @@
 deploy_changed: false
+rsyslog_cert: "https://silo.randomuser.org/secrets/{{ ansible_fqdn }}.pem"
+rsyslog_key: "https://silo.randomuser.org/secrets/{{ ansible_fqdn }}.key"
+cert_path: "/etc/pki/tls/certs/{{ ansible_fqdn }}.pem"
+key_path: "/etc/pki/tls/private/{{ ansible_fqdn }}.pem"
 rsyslog_all_interesting_packages:
   - rsyslog
   - rsyslog-doc
@@ -8,6 +12,7 @@ rsyslog_all_interesting_packages:
   - rsyslog-elasticsearch
   - rsyslog-gssapi
   - rsyslog-crypto
+  - rsyslog-gnutls
 
 rsyslog_snmp:
   - label: default

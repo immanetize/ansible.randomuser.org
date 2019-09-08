@@ -13,27 +13,11 @@ input(type="imudp"
   name="default"
   ruleset="remote_insecure"
   )
-
-module(load="imtcp"
-  NotifyOnConnectionClose="on"
-  KeepAlive="on"
-  KeepAlive.Probes="3"
-  KeepAlive.Time="15"
-  MaxListeners="64"
-  MaxSessions="256"
-  StreamDriver.Name="ptcp"
-  StreamDriver.AuthMode="anon"
-  )
-
-input(type="imtcp"
-  name="default"
-  port="514"
-  address="*"
-  ratelimit.interval="10"
-  ratelimit.burst="20000"
-  ruleset="remote_insecure"
-  )
-  
-  
-
-
+#input(type="imtcp"
+#  name="default"
+#  port="514"
+#  address="*"
+#  ratelimit.interval="10"
+#  ratelimit.burst="20000"
+#  ruleset="remote_insecure"
+#  )

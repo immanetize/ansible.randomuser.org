@@ -3,6 +3,8 @@
     src: rsyslog.conf.j2
     dest: /etc/rsyslog.conf
   register: baseconf_deploy
+- name: prepare secure transport
+  include_tasks: rsyslog_tls.yml
 - name: configure default listening socket
   template:
     src: listen_insecure.conf.j2
@@ -17,6 +19,7 @@
   with_items:
     - 514/tcp
     - 514/udp
+    - 6514/tcp
 - name: configure snmp trap for emergency messages
   template:
     src: snmp.conf.j2
