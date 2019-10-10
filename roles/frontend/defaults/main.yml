@@ -1,0 +1,13 @@
+---
+frontend_packages:
+  - nginx
+  - python3-certbot-nginx
+pandoc_packages:
+  pdf:
+    - texlive-updmap-map
+    - texlive-gsftopk
+    - texlive-ec
+    - texlive-metafont
+    - texlive-context
+  base:
+    - pandoc

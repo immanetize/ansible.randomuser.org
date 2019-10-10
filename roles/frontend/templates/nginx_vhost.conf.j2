@@ -1,0 +1,53 @@
+    server {
+        listen       80 ;
+        listen       [::]:80 ;
+        server_name  {{ site.fqdn }};
+        root         /var/www/html/{{ site.fqdn }};
+{% if site.tls_frontend.enabled %}
+if ($host = {{ site.fqdn }}) {
+    return 301 https://$host$request_uri;
+    }
+{% endif %}    
+        location / {
+        }
+    
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+{% if site.tls_frontend.enabled %}
+    server {
+        listen       443 ssl http2 ;
+        listen       [::]:443 ssl http2 ;
+        server_name  _;
+        root         /var/www/html/{{ site.fqdn }};
+        index index.html index.htm index.txt;
+        include /etc/nginx/local_overrides.d/{{ site.fqdn.conf }}
+{% if site.tls_frontend.certbot %}
+        ssl_certificate /etc/letsencrypt/live/{{ site.fqdn }}/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/{{ site.fqdn }}/privkey.pem;
+{% else %}
+        ssl_certificate "/etc/pki/tls/certs/{{ site.fqdn }}.pem";
+        ssl_certificate_key "/etc/pki/tls/private/{{ site.fqdn }}.key";
+{% endif %}
+        ssl_session_cache shared:SSL:1m;
+        ssl_session_timeout  10m;
+        ssl_ciphers PROFILE=SYSTEM;
+        ssl_prefer_server_ciphers on;
+
+        location / {
+        }
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+    {% endif %}

@@ -1,0 +1,7 @@
+- name: deploy frontend
+  hosts:
+    - frontend
+  tasks:
+    - include_role:
+        name: frontend
+

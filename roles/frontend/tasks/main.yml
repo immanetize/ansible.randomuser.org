@@ -1,0 +1,34 @@
+- name: install web server packages
+  dnf:
+    name: "{{ frontend_packages }}"
+    state: present
+- name: make frontend docdirs
+  file:
+    name: "/var/www/html/{{ item.fqdn }}"
+    state: directory
+    recurse: yes
+  with_items: "{{ sites }}"
+- name: make local override dir
+  file: 
+    name: /etc/nginx/local_overrides.d/
+    state: directory
+- name: make sure a file is there for the site
+  file:
+    name: "/etc/nginx/local_overrides.d/{{ item.fqdn }}.conf"
+    state: touch
+- name: deploy site configs
+  template:
+    src: nginx_vhost.conf.j2
+    dest: "/etc/nginx/conf.d/{{ site.fqdn }}.conf"
+  with_items: "{{ sites }}"
+  loop_control: 
+    loop_var: site
+  register: restart nginx
+- name: open the ports
+  firewalld:
+    service: "{{ item }}"
+    state: enabled
+  with_items:
+    - http
+    - https
+

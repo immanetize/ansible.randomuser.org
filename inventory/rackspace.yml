@@ -1,2 +1,4 @@
 [foreman_standalone]
 foreman1.randomuser.org
+[frontend]
+frontend.randomuser.org
