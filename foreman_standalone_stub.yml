@@ -1,0 +1,7 @@
+- name: foreman standalone stub
+  hosts: foreman_standalone
+  tasks:
+    - include_role:
+        name: perimiter
+    - include_role:
+        name: foreman_standalone

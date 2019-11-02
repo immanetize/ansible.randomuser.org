@@ -1,0 +1,8 @@
+- from `grub1-mknetdir --net-directory /path/to/`
+  creates /path/to/boot, presumed equivalent to /var/lib/tftpboot
+  - src: grub2/x86-85-efi/core-efi
+    dest: grub2/grubx64.efi
+  - src: grub2/x86_64-efi
+    dest: grub2/
+
+   

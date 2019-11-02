@@ -1,0 +1,2 @@
+- debug:
+    msg: "Any tasks required for Katello version upgrades should begin here."

@@ -1,0 +1,2 @@
+- debug:
+    msg: "Any tasks required for Foreman version upgrades should begin here."
