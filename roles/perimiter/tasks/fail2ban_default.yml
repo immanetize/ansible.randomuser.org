@@ -1,0 +1,17 @@
+- name:
+  yum:
+    name: ["fail2ban-server", "fail2ban-firewalld", "fail2ban-systemd"]
+    state: present
+- name: turn on ssh jail
+  ini_file:
+    path: /etc/fail2ban/jail.conf
+    section: sshd
+    option: enabled
+    value: true
+  register: jail_config
+- name: do the service
+  service:
+    name: fail2ban
+    state: "{{ 'restarted' if jail_config.changed else 'started' }}"
+
+
