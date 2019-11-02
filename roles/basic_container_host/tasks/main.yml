@@ -1,0 +1,4 @@
+- name: docker CE host prep
+  include: "docker_{{ docker_vendor.name }}.yml"
+  when: ( docker_vendor is defined )
+

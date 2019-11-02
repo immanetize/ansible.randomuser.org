@@ -1,0 +1,4 @@
+docker_vendor:
+  name: "ce"
+  # options are ['stable', 'edge', 'test'] for ce
+  release_branch: stable

@@ -1,0 +1,18 @@
+- name: get repo
+  copy:
+    content: "{{ lookup('url', 'https://download.docker.com/linux/centos/docker-ce.repo', split_lines=False ) }}"
+    dest: /etc/yum.repos.d/docker-ce.repo
+    validate: "/usr/bin/yum -c %s --disablerepo=* --enablerepo=docker-ce-{{ docker_vendor.release_branch }} makecache fast"
+- name: install package
+  yum:
+    name: ['docker-ce', 'docker-ce-cli']
+    state: "{{ 'latest' if docker_upgrade_now is defined else 'present' }}"
+- name: start and enable service
+  service:
+    name: docker
+    state: "{{ 'restarted' if docker_upgrade_now is defined else 'started' }}"
+    enabled: yes
+
+
+
+
