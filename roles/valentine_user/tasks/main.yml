@@ -1,0 +1,15 @@
+- name: create the user
+  user:
+    name: valentine
+    comment: ansible admin account
+- name: set up user creds
+  authorized_key:
+    key: "{{ lookup('file', '~/.ssh/cloud_id.pub') }}"
+    user: valentine
+- name: give user perms
+  lineinfile:
+    line: "valentine ALL=(ALL) NOPASSWD: ALL"
+    dest: /etc/sudoers.d/valentine
+    validate: "/usr/sbin/visudo -c -f %s"
+    create: yes
+
