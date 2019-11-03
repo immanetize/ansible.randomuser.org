@@ -1,4 +1,17 @@
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: poddington-pool
+spec:
+  accessModes: 
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: do-block-storage
+
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: poddington
@@ -22,7 +35,7 @@ metadata:
 spec:
   containers:
     - name: poddington-http
-      image: nginx
+      image: httpd
       ports:
         - protocol: TCP
           containerPort: 80
