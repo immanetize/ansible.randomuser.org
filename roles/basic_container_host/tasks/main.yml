@@ -3,11 +3,20 @@
 
 - name: docker CE host prep
   include: "docker_{{ docker_vendor.name }}.yml"
-
-- name: template an rke cluster.yml
+- name: do local stuff
   delegate_to: localhost
   run_once: true
-  template:
-    src: cluster.yml
-    dest: rke/cluster.yml
-
+  become: False
+  block:
+    - name: template an rke cluster.yml
+      template:
+        src: cluster.yml
+        dest: /tmp/cluster.yml
+    - name: get rke
+      uri:
+        url: https://github.com/rancher/rke/releases/download/v0.3.2/rke_linux-amd64
+        dest: /tmp/rke
+        status_code: ['304','200']
+  tags:
+    - local
+- debug: msg='pass'

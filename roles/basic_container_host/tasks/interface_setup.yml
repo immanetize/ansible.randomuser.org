@@ -6,8 +6,6 @@
     name: firewalld
     state: started
     enabled: yes
-    #  when: ( network_interfaces.meta is defined ) and
-    #   ( network_interfaces.meta.disable_firewalld == True )
 - name: allow services
   firewalld:
     port: "{{ item }}" 

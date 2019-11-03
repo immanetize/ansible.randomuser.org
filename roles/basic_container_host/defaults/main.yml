@@ -4,10 +4,14 @@ docker_vendor:
   release_branch: stable
 
 network_interfaces:
-  node_address: "{{ ansible_default_ipv4 }}"
+  node_address: "{{ ansible_default_ipv4.address }}"
   meta: 
     disable_firewalld: True
     
 node_labels:
   placeholder: True
+node_roles:
+  - controlplane
+  - worker
+  - etcd
 

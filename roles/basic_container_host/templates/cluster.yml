@@ -1,3 +1,16 @@
 nodes:
 {% for node in ansible_play_batch %}
-- address: "{{ network_interfaces.node_address }}"
+  - address: {{ network_interfaces.node_address }}
+    {% if network_interfaces.internal_address is defined %}
+    internal_address: {{ network_interfaces.internal_address }}
+    {% endif %}
+    role:
+    {% for role in node_roles %}
+      - {{ role }}
+    {% endfor %}
+    hostname_override: {{ ansible_hostname }}
+    user: {{ ansible_ssh_user }}
+    ssh_key_path: {{ ansible_ssh_private_key_file }}
+    labels: "{{ {} | combine(node_labels) }}"
+    taints: []
+{% endfor %}  
