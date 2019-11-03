@@ -1,0 +1,21 @@
+# this is mostly a placeholder for multizone network logic
+#for now, lazy connectivity
+
+- name: enable firewalld
+  service: 
+    name: firewalld
+    state: started
+    enabled: yes
+    #  when: ( network_interfaces.meta is defined ) and
+    #   ( network_interfaces.meta.disable_firewalld == True )
+- name: allow services
+  firewalld:
+    port: "{{ item }}" 
+    state: enabled
+    immediate: yes
+    permanent: yes
+    zone: "{{ kube_zone if kube_zone is defined else 'public' }}"
+  with_items:
+    - 2379-2380/tcp
+    - 10250/tcp
+    - 6443/tcp

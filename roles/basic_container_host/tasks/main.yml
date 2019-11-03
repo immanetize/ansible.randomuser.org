@@ -1,3 +1,7 @@
+- name: set up interfaces
+  include: interface_setup.yml
+  when: ( network_interfaces is defined )
+
 - name: docker CE host prep
   include: "docker_{{ docker_vendor.name }}.yml"
   when: ( docker_vendor is defined )

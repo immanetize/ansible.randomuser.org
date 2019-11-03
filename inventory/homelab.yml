@@ -10,12 +10,14 @@ homelab:
         k8s-alpha.randomuser.org:
         k8s-epsilon.randomuser.org:
         k8s-delta.randomuser.org:
+        k8s-silo.randomuser.org:
     syslog_proxy:
       hosts:
         logproxy0.randomuser.org:
     storage:
       children:
-        silo:
+        hosts:
+          silo:
     compute:
       children:
         fast:

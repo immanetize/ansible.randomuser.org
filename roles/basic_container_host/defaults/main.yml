@@ -2,3 +2,10 @@ docker_vendor:
   name: "ce"
   # options are ['stable', 'edge', 'test'] for ce
   release_branch: stable
+
+network_interfaces:
+  node_address: "{{ ansible_default_ipv4 }}"
+  meta: 
+    disable_firewalld: True
+    
+

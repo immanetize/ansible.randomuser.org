@@ -1,0 +1,3 @@
+nodes:
+{% for node in ansible_play_batch %}
+- address: "{{ network_interfaces.node_address }}"
