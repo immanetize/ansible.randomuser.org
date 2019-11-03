@@ -8,4 +8,6 @@ network_interfaces:
   meta: 
     disable_firewalld: True
     
+node_labels:
+  placeholder: True
 
