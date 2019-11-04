@@ -72,7 +72,15 @@ spec:
           name: write-http
         - protocol: UDP
           containerPort: 25826
-      args: ['collectd.listen_address=":25826"']
+      args: ['--collectd.listen-address=:25826']
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: udp-services
+data: 
+  27001: "default/poddington:25825"
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress

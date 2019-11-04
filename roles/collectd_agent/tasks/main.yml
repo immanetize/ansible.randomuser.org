@@ -1,0 +1,15 @@
+- name: install collectd packages
+  package:
+    name: collectd
+    state: present
+- copy:
+    content: |
+      LoadPlugin network
+      <Plugin network>
+        Server "poddington1.randomuser.org" "27001"
+      </Plugin>
+    dest: /etc/collectd.d/prometheus
+- service: 
+    name: collectd
+    state: started
+    enabled: yes
