@@ -23,8 +23,16 @@ spec:
   ports: 
     - protocol: TCP
       port: 8950
-      targetPort: 80
+      targetPort: 9103
       name: http
+    - protocol: TCP
+      port: 8960
+      targetPort: 9090
+      name: prometheus
+    - protocol: UDP
+      port: 25825
+      targetPort: 25826
+      name: collectd
 ---
 apiVersion: v1
 kind: Pod
@@ -33,13 +41,38 @@ metadata:
   labels:
     app: poddington
 spec:
+  volumes:
+    - name: poddington-vol
+      persistentVolumeClaim:
+        claimName: poddington-pool
+  initContainers:
+    - name: content
+      image: fedora
+      command:
+        - /usr/bin/touch
+        - /usr/local/apache2/htdocs/index.html
+      volumeMounts:
+        - mountPath: "/usr/local/apache2/htdocs/"
+          name: poddington-vol
   containers:
-    - name: poddington-http
-      image: httpd
+    - name: poddington-prometheus
+      image: prom/prometheus
+      volumeMounts:
+        - mountPath: "/prometheus-data"
+          name: poddington-vol
       ports:
         - protocol: TCP
-          containerPort: 80
-          name: http-inside
+          containerPort: 9090
+          name: prometheus
+    - name: poddington-collectd
+      image: prom/collectd-exporter
+      ports:
+        - protocol: TCP
+          containerPort: 9103
+          name: write-http
+        - protocol: UDP
+          containerPort: 25826
+      args: ['collectd.listen_address=":25826"']
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -62,4 +95,4 @@ spec:
       paths:
       - backend:
           serviceName: poddington
-          servicePort: 8950
+          servicePort: 8960
