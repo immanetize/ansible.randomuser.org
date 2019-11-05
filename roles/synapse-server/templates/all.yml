@@ -1,0 +1,56 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata: 
+  name: synapse
+spec:
+  template:
+    metadata:
+      name: synapse
+      labels:
+        app: synapse
+    spec:
+      volumes:
+        - name: synapse-vol
+          persistentVolumeClaim:
+            claimName: synapse-data
+        - name: synapse-pgvol
+          persistentVolumeClaim:
+            claimName: synapse-postgres-data
+        - name: synapse-homeserver
+          configMap:
+            name: homeserver.yaml
+      initContainers:
+        - name: placeholder
+          image: fedora
+          command:
+            - /usr/bin/cat
+            - /etc/fedora-release
+      containers:
+        - name: synapse-server
+          image: matrixdotorg/synapse
+          env:
+            - name: SYNAPSE_CONFIG_PATH
+              value: /run/config/homeserver.yaml
+          volumeMounts:
+            - name: synapse-vol
+              mountPath: "/data"
+            - name: synapse-homeserver
+              mountPath: /run/config/
+          ports:
+            - protocol: TCP
+              containerPort: 8008
+              name: prometheus
+        - name: synapse-db
+          image: postgres:12
+          env:
+            - name: PGDATA
+              value: /pgdata
+          volumeMounts:
+            - mountPath: /pgdata
+              name: synapse-pgvol
+          ports:
+            - protocol: TCP
+              containerPort: 9103
+              name: postgres
+
