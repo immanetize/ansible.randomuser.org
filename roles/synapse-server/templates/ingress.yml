@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  generation: 2
+  name: synapse-ingress
+  namespace: default
+spec:
+  rules:
+  - host: coms.randomuser.org
+    http:
+      paths:
+      - backend:
+          serviceName: synapse
+          servicePort: 8008
+  - host: riot-web.randomuser.org
+    http:
+      paths:
+      - backend:
+          serviceName: riot-web
+          servicePort: 8080

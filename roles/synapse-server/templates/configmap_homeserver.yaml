@@ -5,22 +5,16 @@ data:
     /bin/true || echo false
   homeserver.yaml: |
     server_name: "coms.randomuser.org"
-    pid_file: /data/homeserver.pid
+    pid_file: /data/synapse-data/homeserver.pid
     public_baseurl: https://randomuser.org/
-    #soft_file_limit: 0
     use_presence: false
     require_auth_for_profile_requests: false
     allow_public_rooms_without_auth: false
     allow_public_rooms_over_federation: true
     default_room_version: "4"
-    #gc_thresholds: [700, 10, 10]
     filter_timeline_limit: 5000
     block_non_admin_invites: false
     enable_search: true
-    #federation_domain_whitelist:
-    #  - lon.randomuser.org
-    #  - nyc.randomuser.org
-    #  - syd.randomuser.org
     federation_ip_range_blacklist:
       - '127.0.0.0/8'
       - '10.0.0.0/8'
@@ -44,9 +38,6 @@ data:
     hs_disabled_message: 'i done set hs_disabled:true, administrative downtime'
     mau_stats_only: true
     server_context: randomuser
-    #mau_limit_reserved_threepids:
-    #  - medium: 'email'
-    #    address: 'reserved_user@randomuser.org'
     require_membership_for_aliases: true
     redaction_retention_period: 14d
     user_ips_max_age: 90d
@@ -55,10 +46,9 @@ data:
     database:
       name: "sqlite3"
       args:
-        database: "/data/homeserver.db"
+        database: "/data/synapse-data/homeserver.db"
     event_cache_size: 10K
-    # https://docs.python.org/3.7/library/logging.config.html#configuration-dictionary-schema
-    log_config: "/data/coms.randomuser.org.log.config"
+    log_config: "/run/logconfig/coms.randomuser.org.log.config"
     rc_message:
       per_second: 0.2
       burst_count: 10
@@ -85,8 +75,8 @@ data:
       reject_limit: 50
       concurrent: 3
     enable_media_repo: true
-    media_store_path: "/data/media_store"
-    uploads_path: "/data/uploads"
+    media_store_path: "/data/synapse-data/media_store"
+    uploads_path: "/data/synapse-data/uploads"
     max_upload_size: 22M
     max_image_pixels: 32M
     dynamic_thumbnails: false
@@ -108,66 +98,22 @@ data:
         method: scale
     url_preview_enabled: false
     enable_registration_captcha: false
-    # A secret key used to bypass the captcha test entirely.
     captcha_bypass_secret: "REDACTED"
-    # captcha requires acct?
     registration_shared_secret: "5BHjTi,RnoZnQjj,p^pH8@GcOaO89MBBPekc-YldUBMSp+OLsc"
     allow_guest_access: false
-    #default_identity_server: https://matrix.org
-    #trusted_third_party_id_servers:
-    #  - matrix.org
-    #  - vector.im
-    # threepid needs more reading
     account_threepid_delegates:
-        #email: https://randomuser.org     # Delegate email sending to example.org
-        #msisdn: http://localhost:8090  # Delegate SMS sending to this local process
     auto_join_rooms:
       - "#hamburgers:randomuser.org"
     autocreate_auto_join_rooms: true
     enable_metrics: false
-    #sentry:
-    #    dsn: "..."
     report_stats: false
-    #report_stats_endpoint: http://127.0.0.1/report-usage-stats/push
       - "m.room.name"
-    #app_service_config_files:
-    #  - app_service_1.yaml
-    #  - app_service_2.yaml
     track_appservice_user_ips: true
-    macaroon_secret_key: "V+2x~Xbs;=UA3*;Tz+Uk*jL9*r~5uYrfTdO0##jXL748KI3@vB"
-    form_secret: "eL#8mpHYQ.dc9UDn2:se3jkB7z6nenGNz9d+-q;.hA~s:wCLJ1"
-    signing_key_path: "/data/coms.randomuser.org.signing.key"
-    #key_server_signing_keys_path: "key_server_signing_keys.key"
+    signing_key_path: "/data/synapse-data/coms.randomuser.org.signing.key"
     key_refresh_interval: 1d
-    #trusted_key_servers:
-    #  - server_name: "my_trusted_server.randomuser.org"
-    #    verify_keys:
-    #      "ed25519:auto": "abcdefghijklmnopqrstuvwxyzabcdefghijklmopqr"
-    #  - server_name: "my_other_trusted_server.randomuser.org"
-    #
     trusted_key_servers:
       - server_name: "randomuser.org"
     password_config:
-      # todo, auth integration. then:
-       #enabled: false
-       #localdb_enabled: false
-       # todo: domain email services. then: 
-    #email:
-    #   smtp_host: "localhost"
-    #password_providers:
-    #    - module: "ldap_auth_provider.LdapAuthProvider"
-    #      config:
-    #        enabled: true
-    #        uri: "ldap://ldap.randomuser.org:389"
-    #        start_tls: true
-    #        base: "ou=users,dc=example,dc=com"
-    #        attributes:
-    #           uid: "cn"
-    #           mail: "email"
-    #           name: "givenName"
-    #        #bind_dn:
-    #        #bind_password:
-    #        #filter: "(objectClass=posixAccount)"
     push:
       include_content: true
     enable_group_creation: true
@@ -185,16 +131,6 @@ data:
       system_mxid_avatar_url: "mxc://server.com/oumMVlgDnLYFaPVkExemNVVZ"
       room_name: "Server Notices"
     enable_room_list_search: true
-    #alias_creation_rules:
-    #  - user_id: "*"
-    #    alias: "*"
-    #    room_id: "*"
-    #    action: allow
-    #room_list_publication_rules:
-    #  - user_id: "*"
-    #    alias: "*"
-    #    room_id: "*"
-    #    action: allow
 kind: ConfigMap
 metadata:
   name: homeserver.yaml

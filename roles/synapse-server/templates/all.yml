@@ -20,13 +20,19 @@ spec:
         - name: synapse-homeserver
           configMap:
             name: homeserver.yaml
-      initContainers:
-        - name: placeholder
-          image: fedora
-          command:
-            - /usr/bin/cat
-            - /etc/fedora-release
+        - name: synapse-logconfig
+          configMap:
+            name: log-config
+        - name: riot-web-config
+          configMap:
+            name: riot-web-config
       containers:
+        - name: riot-web
+          image: bubuntux/riot-web
+          ports: 
+            - name: riot-web
+              containerPort: 8080
+              protocol: TCP
         - name: synapse-server
           image: matrixdotorg/synapse
           env:
@@ -37,6 +43,8 @@ spec:
               mountPath: "/data"
             - name: synapse-homeserver
               mountPath: /run/config/
+            - name: synapse-logconfig
+              mountPath: /run/logconfig/
           ports:
             - protocol: TCP
               containerPort: 8008
@@ -45,9 +53,9 @@ spec:
           image: postgres:12
           env:
             - name: PGDATA
-              value: /pgdata
+              value: /data/pgdata
           volumeMounts:
-            - mountPath: /pgdata
+            - mountPath: /data
               name: synapse-pgvol
           ports:
             - protocol: TCP
