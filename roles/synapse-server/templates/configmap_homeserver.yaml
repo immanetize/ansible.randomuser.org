@@ -5,8 +5,13 @@ data:
     /bin/true || echo false
   homeserver.yaml: |
     server_name: "coms.randomuser.org"
-    pid_file: /data/synapse-data/homeserver.pid
+    pid_file: /data/homeserver.pid
     public_baseurl: https://randomuser.org/
+    enable_registration: false
+    tls_certificate_path: /run/certs/tls.crt
+    tls_private_key_path: /run/certs/tls.key
+    macaroon_secret_key: /run/secret/coms.randomuser.org.macaroon.key
+    signing_key_path: /run/secret/coms.randomuser.org.signing.key
     use_presence: false
     require_auth_for_profile_requests: false
     allow_public_rooms_without_auth: false
@@ -46,7 +51,7 @@ data:
     database:
       name: "sqlite3"
       args:
-        database: "/data/synapse-data/homeserver.db"
+        database: "/data/homeserver.db"
     event_cache_size: 10K
     log_config: "/run/logconfig/coms.randomuser.org.log.config"
     rc_message:
@@ -75,8 +80,8 @@ data:
       reject_limit: 50
       concurrent: 3
     enable_media_repo: true
-    media_store_path: "/data/synapse-data/media_store"
-    uploads_path: "/data/synapse-data/uploads"
+    media_store_path: "/data/media_store"
+    uploads_path: "/data/uploads"
     max_upload_size: 22M
     max_image_pixels: 32M
     dynamic_thumbnails: false
@@ -96,7 +101,17 @@ data:
       - width: 800
         height: 600
         method: scale
-    url_preview_enabled: false
+    url_preview_enabled: true
+    url_preview_ip_range_blacklist:
+      - '127.0.0.0/8'
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+      - '100.64.0.0/10'
+      - '169.254.0.0/16'
+      - '::1/128'
+      - 'fe80::/64'
+      - 'fc00::/7'
     enable_registration_captcha: false
     captcha_bypass_secret: "REDACTED"
     registration_shared_secret: "5BHjTi,RnoZnQjj,p^pH8@GcOaO89MBBPekc-YldUBMSp+OLsc"
@@ -109,7 +124,6 @@ data:
     report_stats: false
       - "m.room.name"
     track_appservice_user_ips: true
-    signing_key_path: "/data/synapse-data/coms.randomuser.org.signing.key"
     key_refresh_interval: 1d
     trusted_key_servers:
       - server_name: "randomuser.org"

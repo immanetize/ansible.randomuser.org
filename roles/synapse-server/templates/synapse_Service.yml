@@ -27,3 +27,18 @@ spec:
       port: 8080
       targetPort: 8080
       name: riot-web
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: synapse-db 
+  labels:
+    app: synapse-db
+spec:
+  selector:
+    app: synapse-db
+  ports:
+    - protocol: TCP
+      port: 9103
+      targetPort: 9103
+      name: synapse-db

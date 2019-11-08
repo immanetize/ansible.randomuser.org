@@ -23,16 +23,25 @@ spec:
         - name: synapse-logconfig
           configMap:
             name: log-config
-        - name: riot-web-config
-          configMap:
-            name: riot-web-config
+        - name: synapse-certs
+          secret:
+            secretName: coms.randomuser.org
+        - name: synapse-secrets
+          secret:
+            secretName: synapse-secrets
+      initContainers:
+        - name: chmod
+          image: fedora
+          command: ["/bin/bash", "-c"]
+          args:
+            - chmod 2777 /data
+          volumeMounts:
+            - name: synapse-vol
+              mountPath: "/data"
       containers:
-        - name: riot-web
-          image: bubuntux/riot-web
-          ports: 
-            - name: riot-web
-              containerPort: 8080
-              protocol: TCP
+        - name: sidecar
+          image: fedora
+          command: ["/sbin/init"]
         - name: synapse-server
           image: matrixdotorg/synapse
           env:
@@ -45,6 +54,10 @@ spec:
               mountPath: /run/config/
             - name: synapse-logconfig
               mountPath: /run/logconfig/
+            - name: synapse-certs
+              mountPath: /run/certs/
+            - name: synapse-secrets
+              mountPath: /run/secret/
           ports:
             - protocol: TCP
               containerPort: 8008
