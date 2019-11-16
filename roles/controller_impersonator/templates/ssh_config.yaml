@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tunnelbuddy-ssh-config
+data:
+  config:
+    Host *
+      IdentityFile /root/.ssh/id_rsa
+      ControlMaster auto
+      ControlPath /run/gateway_socket_%h:%p
+      ControlPersist yes
+      User tunnelbuddy

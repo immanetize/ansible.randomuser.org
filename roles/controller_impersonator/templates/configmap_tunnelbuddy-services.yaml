@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tunnelbuddy-services
+data:
+  package-installer.service: |
+    [Unit]
+    Description=gimme dat package
+    Before=dns-translator.service
+    
+    [Service]
+    Type=oneshot
+    ExecStart=/usr/bin/dnf -y install socat
+    
+    [Install]
+    WantedBy=multi-user.target
+  dns-translator.service: |
+    [Unit]
+    Description=translates DNS requests for TCP transport
+    After=network.target
+    After=package-installer.service
+    
+    [Service]
+    Type=simple
+    ExecStart=/usr/bin/socat -T15 udp4-recvfrom:53,reuseaddr,fork tcp:60553
+    Restart=on-failure
+    RestartSec=10s
+    
+    [Install]
+    WantedBy=multi-user.target
+  ssh-forwarder.service: |
+    [Unit]
+    Description=ssh tunnel
+    After=network.target
+    Type=forking
+    EnvironmentFile=-/run/ssh_forwarder_environment/env
+    ExecStart=/usr/bin/ssh -4 -F /run/ssh_config/config -L 88:10.27.0.89:88 -L 60553:10.21.0.89:60553 -L 443:10.21.0.89:443 -L 389:10.21.0.89:389 -L 464:10.21.0.89:464 -L 636:10.21.0.89:636 -Nnf 98.156.191.126 -p 2703 -o StrictHostKeyChecking=no
+    KillMode=control-group
+    Restart=on-failure
+    RestartSec=42s

@@ -3,11 +3,19 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: letsencrypt-staging
+    nginx.ingress.kubernetes.io/proxy-body-size: 0
   generation: 2
   name: synapse-ingress
   namespace: default
 spec:
   rules:
+  - host: registry.randomuser.org
+    http:
+      paths:
+      - backend:
+          serviceName: registry
+          servicePort: 5000
   - host: coms.randomuser.org
     http:
       paths:
@@ -24,7 +32,11 @@ spec:
   - hosts:
     - coms.randomuser.org
     - riot-web.randomuser.org
-    secretName: coms.randomuser.org
+      #secretName: coms.randomuser.org
+    secretName: letsencrypt-stage
+  - hosts:
+    - registry.randomuser.org
+    secretName: letsencrypt-stage
 status:
   loadBalancer:
     ingress:

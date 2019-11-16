@@ -4,3 +4,12 @@ metadata:
   name: tcp-services
 data: 
   8448: "default/nginx-ingress-controller:443"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      client_max_body_size 0;
+  name: nginx-ingress-controller

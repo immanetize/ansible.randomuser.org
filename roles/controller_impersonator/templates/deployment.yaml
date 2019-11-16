@@ -1,0 +1,52 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata: 
+  name: tunnelbuddy
+spec:
+  template:
+    metadata:
+      name: tunnelbuddy
+      labels:
+        app: tunnelbuddy
+    spec:
+      volumes:
+        - name: tunnelbuddy-services
+          configMap:
+            name: tunnelbuddy-services
+        - name: tunnelbuddy-ssh-config
+          configMap:
+            name: tunnelbuddy-ssh-config
+        - name: tunnelbuddy-ssh-secrets
+          secret:
+            secretName: tunnelbuddy-ssh-secrets
+      containers:
+        - name: tunnelbuddy-ssh
+          image: fedora
+          command: ["/sbin/init"]
+          volumeMounts:
+            - name: tunnelbuddy-services
+              mountPath: /run/systemd/transient
+            - name: tunnelbuddy-ssh-config
+              mountPath: /run/ssh_config
+            - name: tunnelbuddy-ssh-secrets
+              mountPath: /root/.ssh/
+          ports:
+            - protocol: UDP
+              containerPort: 53
+              name: dns
+            - protocol: TCP
+              containerPort: 443
+              name: https
+            - protocol: TCP
+              containerPort: 389
+              name: ldap
+            - protocol: TCP
+              containerPort: 88
+              name: kerberos
+            - protocol: TCP
+              containerPort: 464
+              name: kpasswd
+            - protocol: TCP
+              containerPort: 636
+              
