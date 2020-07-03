@@ -1,0 +1,11 @@
+- name: emplace syslog forwarding directive
+  become: true
+  copy: 
+    path: /etc/rsyslog.d/region_collector.conf
+    content: | 
+      *.* {{ region_log_collect }}
+  register: rsyslog_conf
+- name: reload the daemon
+  systemd:
+    name: rsyslog
+    state: "{{ 'restarted' if rsyslog_conf.changed else 'started' }}"
