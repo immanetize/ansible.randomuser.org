@@ -1,7 +1,7 @@
 - name: emplace syslog forwarding directive
   become: true
   copy: 
-    path: /etc/rsyslog.d/region_collector.conf
+    dest: /etc/rsyslog.d/region_collector.conf
     content: | 
       *.* {{ region_log_collect }}
   register: rsyslog_conf
