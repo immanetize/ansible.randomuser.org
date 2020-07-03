@@ -1,0 +1,12 @@
+source_repos:
+  - uri: https://git.jlay.dev/jlay/nebula.git
+    roles_path: './roles'
+  - uri: https://git.jlay.dev/jlay/deploy-base.git
+    roles_path: './roles'
+  - uri: https://github.com/immanetize/ansible-k8s-ec2.git
+    roles_path: './roles'
+  - uri: https://github.com/immanetize/ansible.randomuser.org.git
+    roles_path: './roles'
+store_info:
+  path: /srv/content/ansible_repos
+  sync_frequency: 1h
