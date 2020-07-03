@@ -37,7 +37,7 @@
       else
         git clone {{ repo.uri }}
       fi
-      find {{ store_info.path }}/SHORT_PATH/{{ repo.roles_path }} \
+      find {{ store_info.path }}/$SHORT_PATH/{{ repo.roles_path }} \
       -maxdepth 1 -mindepth 1 -type d | \
         while read path; do 
           [ -L {{ store_info.path }}/local_aggregation/$(basename $path) ] || ln -sf $path {{ store_info.path }}/local_aggregation/;done
