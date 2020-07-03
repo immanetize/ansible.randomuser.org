@@ -71,4 +71,5 @@
     name: ansible-repo-sync.timer
     state: started
     enabled: yes
+    no_block: yes
 
