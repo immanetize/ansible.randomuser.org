@@ -36,27 +36,21 @@
       #!/usr/bin/bash
       # symlinks role paths from {{ store_info.path }} subdirectories
       # into {{ store_info.path }}/local_aggregation
+      pushd {{ store_info.path }}
       {% for repo in source_repos %}
-      find {{ store_info.path }}/{{ repo.uri | urlsplit('path') | basename | regex_replace('.git$', '') }}/{{ repo.roles_path }} \
+      SHORT_PATH={{ repo.uri | urlsplit('path') | basename | regex_replace('.git$', '') }}
+      if [[ -d $SHORT_PATH ]]; then
+        pushd $SHORT_PATH
+        git pull
+        popd
+      else
+        git clone {{ repo.uri }}
+      fi
+      find {{ store_info.path }}/SHORT_PATH/{{ repo.roles_path }} \
       -maxdepth 1 -mindepth 1 -type d | \
         while read path; do 
           [ -L {{ store_info.path }}/local_aggregation/$(basename $path) ] || ln -sf $path {{ store_info.path }}/local_aggregation/;done
       {% endfor %}
-- name: template out sync script
-  become: true
-  copy:
-    mode: 0755
-    dest: /usr/share/foreman-proxy/bin/sync_ansible_repos.sh
-    content: |
-      #!/usr/bin/bash
-      # pulls new content to repos in {{ store_info.path }}
-      pushd {{ store_info.path }}
-      find . -mindepth 1 -maxdepth 1 -not -path ./local_aggregation | while read repo; do
-        pushd $repo
-        git pull --rebase
-        popd
-      done
-      popd
 - name: create repo sync service
   become: true
   copy:
@@ -66,8 +60,7 @@
       Description=Syncs ansible repository content to {{ store_info.path }}
       [Service]
       Type=oneshot
-      ExecStart=/usr/share/foreman-proxy/bin/sync_ansible_repos.sh
-      ExecStartPost=/usr/share/foreman-proxy/bin/update_ansible_roles.sh
+      ExecStart=/usr/share/foreman-proxy/bin/update_ansible_roles.sh
       User=foreman-proxy
 - name: create repo sync timer job
   become: true
