@@ -53,6 +53,7 @@
       Type=oneshot
       ExecStart=/usr/share/foreman-proxy/bin/update_ansible_roles.sh
       User=foreman-proxy
+  register: service_unit
 - name: create repo sync timer job
   become: true
   copy: 
@@ -65,10 +66,11 @@
       OnUnitActiveSec={{ store_info.sync_frequency }}
       [Install]
       WantedBy=timers.target
+  register: timer_unit
 - name: enable the timer
   become: true
   systemd:
-    daemon_reload: yes
+    daemon_reload: "{{ 'yes' if ( service_unit.changed or timer_unit.changed ) else 'no' }}"
     name: ansible-repo-sync.timer
     state: started
     enabled: yes
