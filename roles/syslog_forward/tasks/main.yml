@@ -7,6 +7,7 @@
   register: rsyslog_conf
 - name: reload the daemon
   become: true
+  become_user: root
   systemd:
     name: rsyslog
     state: "{{ 'restarted' if rsyslog_conf.changed else 'started' }}"
