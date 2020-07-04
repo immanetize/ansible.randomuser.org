@@ -1,5 +1,6 @@
 - name: emplace syslog forwarding directive
   become: true
+  become_user: root
   copy: 
     dest: /etc/rsyslog.d/region_collector.conf
     content: | 
