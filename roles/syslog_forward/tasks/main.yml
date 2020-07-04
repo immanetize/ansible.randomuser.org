@@ -1,12 +1,9 @@
-- name: test
-  become: true
-  shell: whoami
 - name: emplace syslog forwarding directive
   become: true
   copy: 
     dest: /etc/rsyslog.d/region_collector.conf
     content: | 
-      *.* @{{ region_log_collect }}
+      *.* @{{ region_collector }}
   register: rsyslog_conf
 - name: reload the daemon
   become: true
